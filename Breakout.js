@@ -28,6 +28,8 @@ let gl;
 let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only send position)
 let g_camera = new Camera();
 
+let g_ball = new Ball();
+
 let a_Position;
 let u_ModelMatrix;
 let u_ProjectionMatrix;
@@ -58,7 +60,7 @@ function renderAllShapes() {
 
   /* CAMERA */
   let projectionMatrix = new Matrix4();
-  projectionMatrix.setPerspective(70, canvas.width / canvas.height, 0.1, 100);
+  projectionMatrix.setPerspective(g_camera.fov, canvas.width / canvas.height, g_camera.near, g_camera.far);
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projectionMatrix.elements);
 
   let viewMatrix = new Matrix4();
@@ -79,19 +81,12 @@ function renderAllShapes() {
   cube.modelMatrix.scale(0.5, 0.5, 0.5);
 
   gl.uniformMatrix4fv(u_ModelMatrix, false, cube.modelMatrix.elements);
-
   gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
-
 
   /* SPHERES */
   gl.bufferData(gl.ARRAY_BUFFER, Sphere.vertices, gl.STATIC_DRAW);
 
-  let sphere = new Sphere();
-  sphere.modelMatrix.translate(2, 0, 0);
-
-  gl.uniformMatrix4fv(u_ModelMatrix, false, sphere.modelMatrix.elements);
-
-  gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
+  g_ball.move();
 }
 
 function setupBuffer() {
