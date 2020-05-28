@@ -69,6 +69,7 @@ function renderAllShapes() {
   );
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
 
+
   /* CUBES */
   gl.bufferData(gl.ARRAY_BUFFER, Cube.vertices, gl.STATIC_DRAW);
 
@@ -80,6 +81,17 @@ function renderAllShapes() {
   gl.uniformMatrix4fv(u_ModelMatrix, false, cube.modelMatrix.elements);
 
   gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
+
+
+  /* SPHERES */
+  gl.bufferData(gl.ARRAY_BUFFER, Sphere.vertices, gl.STATIC_DRAW);
+
+  let sphere = new Sphere();
+  sphere.modelMatrix.translate(2, 0, 0);
+
+  gl.uniformMatrix4fv(u_ModelMatrix, false, sphere.modelMatrix.elements);
+
+  gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
 }
 
 function setupBuffer() {
