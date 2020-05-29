@@ -96,58 +96,58 @@ function renderAllShapes() {
 }
 
 function mouseMove(e) {
-    // Only use the x direction since paddle moves horizontally
-    let x = e.movementX; 
-    let moveDirection;
-   
-    // Normalize horizontal movement
-    if (x > 0) {
-      moveDirection = 1;
-    } else if (x < 0) {
-      moveDirection = -1;
-    }
+  // Only use the x direction since paddle moves horizontally
+  let x = e.movementX; 
+  let moveDirection;
+ 
+  // Normalize horizontal movement
+  if (x > 0) {
+    moveDirection = 1;
+  } else if (x < 0) {
+    moveDirection = -1;
+  }
 
-    moveDirection *= g_mouseSensitivity;
+  moveDirection *= g_mouseSensitivity;
 }
 
 function pointerLockChange(){
-    if (document.pointerLockElement === canvas||
-        document.mozPointerLockElement === canvas||
-        document.webkitPointerLockElement === canvas) {
-        // Pointer was just locked
-        // Enable the mousemove listener
-        document.addEventListener("mousemove", mouseMove, false);
-    } else {
-        // Pointer was just unlocked
-        // Disable the mousemove listener
-        document.removeEventListener("mousemove", mouseMove, false);
-    }
+  if (document.pointerLockElement === canvas||
+    document.mozPointerLockElement === canvas||
+    document.webkitPointerLockElement === canvas) {
+    // Pointer was just locked
+    // Enable the mousemove listener
+    document.addEventListener("mousemove", mouseMove, false);
+  } else {
+    // Pointer was just unlocked
+    // Disable the mousemove listener
+    document.removeEventListener("mousemove", mouseMove, false);
+  }
 }
 
 function setupMouseControl() {
-    // Pointer lock setup to work for several browsers
-    canvas.requestPointerLock = canvas.requestPointerLock ||
-        canvas.mozRequestPointerLock ||
-        canvas.webkitRequestPointerLock;
-    document.exitPointerLock = document.exitPointerLock ||
-        document.mozExitPointerLock ||
-        document.webkitExitPointerLock;
+  // Pointer lock setup to work for several browsers
+  canvas.requestPointerLock = canvas.requestPointerLock ||
+    canvas.mozRequestPointerLock ||
+    canvas.webkitRequestPointerLock;
+  document.exitPointerLock = document.exitPointerLock ||
+    document.mozExitPointerLock ||
+    document.webkitExitPointerLock;
 
-    // Hook pointer lock state change events
-    document.addEventListener('pointerlockchange', pointerLockChange, false);
-    document.addEventListener('mozpointerlockchange', pointerLockChange, 
-        false);
-    document.addEventListener('webkitpointerlockchange', pointerLockChange, 
-        false);
+  // Hook pointer lock state change events
+  document.addEventListener('pointerlockchange', pointerLockChange, false);
+  document.addEventListener('mozpointerlockchange', pointerLockChange, 
+    false);
+  document.addEventListener('webkitpointerlockchange', pointerLockChange, 
+    false);
 
-    // Ask the browser to lock the pointer
-    canvas.onclick = function() {
-        if(document.pointerLockElement !== canvas && 
-           document.mozPointerLockElement !== canvas &&
-           document.webkitPointerLockElement !== canvas) { 
-            canvas.requestPointerLock();
-        }
-    };
+  // Ask the browser to lock the pointer
+  canvas.onclick = function() {
+    if(document.pointerLockElement !== canvas && 
+      document.mozPointerLockElement !== canvas &&
+      document.webkitPointerLockElement !== canvas) { 
+      canvas.requestPointerLock();
+    }
+  };
 }
 
 function setupBuffer() {
