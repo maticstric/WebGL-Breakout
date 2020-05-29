@@ -76,10 +76,7 @@ function renderAllShapes() {
   /* CUBES */
   gl.bufferData(gl.ARRAY_BUFFER, Cube.vertices, gl.STATIC_DRAW);
 
-  //let cube = new Cube();
-  //cube.modelMatrix.translate(2, 2, 0);
-  //cube.modelMatrix.scale(0.5, 0.5, 0.5);
-
+  // Draw g_tile
   gl.uniformMatrix4fv(u_ModelMatrix, false, g_tile.cube.modelMatrix.elements);
   gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
 
@@ -88,6 +85,7 @@ function renderAllShapes() {
 
   g_ball.move();
 
+  // Draw g_ball
   gl.uniformMatrix4fv(u_ModelMatrix, false, g_ball.sphere.modelMatrix.elements);
   gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
 }

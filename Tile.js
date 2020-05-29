@@ -2,16 +2,16 @@ class Tile {
 
   constructor() {
     this.cube = new Cube();
-    this.position = new Vector3([-2, 0, 0]);
 
-    // Some initialization
-    let x = this.position.elements[0];
-    let y = this.position.elements[1];
-    let z = this.position.elements[2];
-
-    this.cube.modelMatrix.translate(x, y, z);
+    this.cube.modelMatrix.translate(-2, 0, 0); // Initial position
     this.cube.modelMatrix.scale(0.2, 0.1, 0.1);
+  }
 
-    console.log(this.cube.modelMatrix);
+  position() {
+    let x = this.cube.modelMatrix.elements[12];
+    let y = this.cube.modelMatrix.elements[13];
+    let z = this.cube.modelMatrix.elements[14];
+
+    return new Vector3([x, y, z]);
   }
 }
