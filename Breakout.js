@@ -25,12 +25,13 @@ var FSHADER_SOURCE =
 let canvas;
 let gl;
 
-let g_mouseSensitivity = 1;
+let g_mouseSensitivity = 0.3;
 let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only send position)
 let g_camera = new Camera();
 
 let g_ball = new Ball();
 let g_tile = new Tile();
+let g_paddle = new Paddle();
 
 let a_Position;
 let u_ModelMatrix;
@@ -84,10 +85,15 @@ function renderAllShapes() {
   // Draw g_tile
   gl.uniformMatrix4fv(u_ModelMatrix, false, g_tile.cube.modelMatrix.elements);
   gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
+  
+  // Draw g_paddle
+  gl.uniformMatrix4fv(u_ModelMatrix, false, g_paddle.cube.modelMatrix.elements);
+  gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
 
   /* SPHERES */
   gl.bufferData(gl.ARRAY_BUFFER, Sphere.vertices, gl.STATIC_DRAW);
 
+  // Update ball position
   g_ball.move();
 
   // Draw g_ball
@@ -105,21 +111,22 @@ function mouseMove(e) {
     moveDirection = 1;
   } else if (x < 0) {
     moveDirection = -1;
+  } else {
+    moveDirection = 0;
   }
 
-  moveDirection *= g_mouseSensitivity;
+  moveDirection *= g_mouseSensitivity; // Apply mouse sensitivity
+  g_paddle.move(moveDirection); // Update the paddle position
 }
 
 function pointerLockChange(){
   if (document.pointerLockElement === canvas||
     document.mozPointerLockElement === canvas||
     document.webkitPointerLockElement === canvas) {
-    // Pointer was just locked
-    // Enable the mousemove listener
+    // Pointer was just locked, enable the mousemove listener
     document.addEventListener("mousemove", mouseMove, false);
   } else {
-    // Pointer was just unlocked
-    // Disable the mousemove listener
+    // Pointer was just unlocked, disable the mousemove listener
     document.removeEventListener("mousemove", mouseMove, false);
   }
 }
@@ -140,7 +147,7 @@ function setupMouseControl() {
   document.addEventListener('webkitpointerlockchange', pointerLockChange, 
     false);
 
-  // Ask the browser to lock the pointer
+  // Ask the browser to lock the pointer on canvas click
   canvas.onclick = function() {
     if(document.pointerLockElement !== canvas && 
       document.mozPointerLockElement !== canvas &&

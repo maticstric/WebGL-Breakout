@@ -10,7 +10,7 @@ class Paddle {
   }
 
   move(moveDirection) {
-    this.cube.modelMatrix.translate(moveDirection, y, z);
+    this.cube.modelMatrix.translate(moveDirection, 0, 0);
   }
 
   position() {
