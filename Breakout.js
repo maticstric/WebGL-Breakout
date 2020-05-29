@@ -110,6 +110,11 @@ function renderAllShapes() {
   g_ball.sphere.render(); 
 }
 
+function startGame() {
+  g_gameStarted = true;
+  g_ball.velocity = new Vector3([0.05, 0.05, 0]);
+}
+
 function mouseMove(e) {
   // Only use the x direction since paddle moves horizontally
   let x = e.movementX; 
@@ -167,6 +172,14 @@ function setupMouseControl() {
       document.mozPointerLockElement !== canvas &&
       document.webkitPointerLockElement !== canvas) { 
       canvas.requestPointerLock();
+      
+      // Add listener to start game
+      document.addEventListener('keydown', (event) => {
+        console.log(event.key);
+        if (event.key === ' ') {
+          startGame();
+        }
+      });
     }
   };
 }
