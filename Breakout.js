@@ -99,15 +99,12 @@ function mouseMove(e) {
     let x = e.movementX; 
     let moveDirection;
    
-    // Check for == 0 to avoid NaN when normalizing since diving by magnitude
-    if (x != 0) {
-      moveDirection = new Vector3([e.movementX, 0, 0]);
-      moveDirection.normalize();
-    } else {
-      moveDirection = new Vector3([0, 0, 0]);
+    // Normalize horizontal movement
+    if (x > 0) {
+      moveDirection = 1;
+    } else if (x < 0) {
+      moveDirection = -1;
     }
-    
-    console.log(moveDirection);
 }
 
 function pointerLockChange(){
