@@ -54,13 +54,15 @@ class Cube extends Model{
   }
 
   render() {
+    var modelMatrix = this.positionMatrix.multiply(this.scaleMatrix);
+
     // To avoid rentering the same set of vertices into the vertex buffer
     if (g_modelInBuffer != CUBE) {
       gl.bufferData(gl.ARRAY_BUFFER, Cube.vertices, gl.STATIC_DRAW);
       g_modelInBuffer = CUBE;
     }
 
-    gl.uniformMatrix4fv(u_ModelMatrix, false, this.modelMatrix.elements);
+    gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
     gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
   }
 }

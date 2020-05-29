@@ -4,12 +4,15 @@ class Ball {
     this.sphere = new Sphere();
     this.velocity = new Vector3([0, 0, 0]);
 
-    this.sphere.modelMatrix.translate(0, -8.75, 0); // Inital position
-    this.sphere.modelMatrix.scale(0.35, 0.35, 0.35);
+    this.sphere.positionMatrix.setTranslate(0, -8.75, 0); // Inital position
+    this.sphere.scaleMatrix.setScale(0.35, 0.35, 0.35);
+    //this.sphere.scaleMatrix.translate(0, -8.75, 0);
+    //this.sphere.scaleMatrix.scale(0.35, 0.35, 0.35);
+    console.log("ball", this.sphere.scaleMatrix);
   }
 
   mouseMove(moveDirection){
-    this.sphere.modelMatrix.translate(moveDirection, 0, 0);
+    this.sphere.positionMatrix.translate(moveDirection, 0, 0);
   }
 
   move() {
@@ -17,7 +20,7 @@ class Ball {
     let y = this.velocity.elements[1];
     let z = this.velocity.elements[2];
 
-    this.sphere.modelMatrix.translate(x, y, z);
+    this.sphere.positionMatrix.translate(x, y, z);
   }
 
   position() {

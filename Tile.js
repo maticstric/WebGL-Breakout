@@ -3,9 +3,9 @@ class Tile {
   constructor() {
     this.cube = new Cube();
 
-    this.cube.modelMatrix.translate(0, 0, 0); // Initial position
-    this.cube.modelMatrix.scale(1, 0.3, 0.3);
-
+    this.cube.positionMatrix.setTranslate(0, 0, 0); // Initial position
+    this.cube.scaleMatrix.setScale(1, 0.3, 0.3);
+    console.log("tile", this.cube.positionMatrix);
   }
 
   position() {

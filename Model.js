@@ -1,5 +1,8 @@
 class Model {
+
   constructor() {
-    this.modelMatrix = new Matrix4();
+    this.positionMatrix = new Matrix4();
+    this.scaleMatrix = new Matrix4();
   }
+
 }
