@@ -9,9 +9,9 @@ class Tile {
   }
 
   position() {
-    let x = this.cube.modelMatrix.elements[12];
-    let y = this.cube.modelMatrix.elements[13];
-    let z = this.cube.modelMatrix.elements[14];
+    let x = this.cube.positionMatrix.elements[12];
+    let y = this.cube.positionMatrix.elements[13];
+    let z = this.cube.positionMatrix.elements[14];
 
     return new Vector3([x, y, z]);
   }
