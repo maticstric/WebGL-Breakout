@@ -22,6 +22,10 @@ var FSHADER_SOURCE =
   }
   `;
 
+// Bounds for the ball in world coordiantes
+const EDGE_X = 9;
+const EDGE_Y = 10.3;
+
 const CUBE = 0; // ints used for identifying the current model in the vertex buffer
 const SPHERE = 1;
 let g_modelInBuffer;
