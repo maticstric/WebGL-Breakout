@@ -1,8 +1,19 @@
-class Sphere {
+class Sphere extends Model{
   static vertices = []; // initalized after class declaration
 
   constructor() {
-    this.modelMatrix = new Matrix4();
+    super();
+  }
+
+  render() {
+    // To avoid rentering the same set of vertices into the vertex buffer
+    if (g_modelInBuffer != SPHERE) {
+      gl.bufferData(gl.ARRAY_BUFFER, Sphere.vertices, gl.STATIC_DRAW);
+      g_modelInBuffer = SPHERE;
+    }    
+   
+    gl.uniformMatrix4fv(u_ModelMatrix, false, this.modelMatrix.elements);
+    gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
   }
 }
 

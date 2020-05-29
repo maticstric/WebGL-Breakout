@@ -22,10 +22,15 @@ var FSHADER_SOURCE =
   }
   `;
 
+const CUBE = 0; // ints used for identifying the current model in the vertex buffer
+const SPHERE = 1;
+let g_modelInBuffer;
+
+let g_mouseSensitivity = 0.3;
+
 let canvas;
 let gl;
 
-let g_mouseSensitivity = 0.3;
 let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only send position)
 let g_camera = new Camera();
 
@@ -80,25 +85,18 @@ function renderAllShapes() {
 
 
   /* CUBES */
-  gl.bufferData(gl.ARRAY_BUFFER, Cube.vertices, gl.STATIC_DRAW);
-
   // Draw g_tile
-  gl.uniformMatrix4fv(u_ModelMatrix, false, g_tile.cube.modelMatrix.elements);
-  gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
+  g_tile.cube.render();
   
   // Draw g_paddle
-  gl.uniformMatrix4fv(u_ModelMatrix, false, g_paddle.cube.modelMatrix.elements);
-  gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
+  g_paddle.cube.render(); 
 
   /* SPHERES */
-  gl.bufferData(gl.ARRAY_BUFFER, Sphere.vertices, gl.STATIC_DRAW);
-
   // Update ball position
   g_ball.move();
 
   // Draw g_ball
-  gl.uniformMatrix4fv(u_ModelMatrix, false, g_ball.sphere.modelMatrix.elements);
-  gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
+  g_ball.sphere.render(); 
 }
 
 function mouseMove(e) {

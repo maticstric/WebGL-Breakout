@@ -1,4 +1,4 @@
-class Cube {
+class Cube extends Model{
   static vertices = new Float32Array([
       // Front
        1, -1, -1,
@@ -50,6 +50,17 @@ class Cube {
   ]);
 
   constructor() {
-    this.modelMatrix = new Matrix4();
+    super();
+  }
+
+  render() {
+    // To avoid rentering the same set of vertices into the vertex buffer
+    if (g_modelInBuffer != CUBE) {
+      gl.bufferData(gl.ARRAY_BUFFER, Cube.vertices, gl.STATIC_DRAW);
+      g_modelInBuffer = CUBE;
+    }
+
+    gl.uniformMatrix4fv(u_ModelMatrix, false, this.modelMatrix.elements);
+    gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
   }
 }
