@@ -37,10 +37,14 @@ let u_ProjectionMatrix;
 let u_ViewMatrix;
 
 function main() {
+  // WebGL and GLSL setup
   setupWebGL();
   initalizeShaders();
   connectVariablesToGLSL();
   setupBuffer();
+
+  // Controls setup
+  setupMouseControl();
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -88,6 +92,56 @@ function renderAllShapes() {
   // Draw g_ball
   gl.uniformMatrix4fv(u_ModelMatrix, false, g_ball.sphere.modelMatrix.elements);
   gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
+}
+
+function mouseMove(e) {
+    // Only use the x direction since paddle moves horizontally
+    moveDirection = new Vector3([e.movementX, 0, 0]);
+    
+    console.log(moveDirection);
+}
+
+function pointerLockChange(){
+    if (document.pointerLockElement === canvas||
+        document.mozPointerLockElement === canvas||
+        document.webkitPointerLockElement === canvas) {
+        // Pointer was just locked
+        // Enable the mousemove listener
+        document.addEventListener("mousemove", mouseMove, false);
+    } else {
+        // Pointer was just unlocked
+        // Disable the mousemove listener
+        document.removeEventListener("mousemove", mouseMove, false);
+    }
+}
+
+function setupMouseControl() {
+    // Pointer lock setup to work for several browsers
+    canvas.requestPointerLock = canvas.requestPointerLock ||
+        canvas.mozRequestPointerLock ||
+        canvas.webkitRequestPointerLock;
+
+    document.exitPointerLock = document.exitPointerLock ||
+        document.mozExitPointerLock ||
+        document.webkitExitPointerLock;
+
+    // Hook pointer lock state change events
+    document.addEventListener('pointerlockchange', pointerLockChange, false);
+    document.addEventListener('mozpointerlockchange', pointerLockChange, 
+        false);
+    document.addEventListener('webkitpointerlockchange', pointerLockChange, 
+        false);
+
+    // Ask the browser to lock the pointer
+    canvas.onclick = function() {
+        if(document.pointerLockElement !== canvas && 
+           document.mozPointerLockElement !== canvas &&
+           document.webkitPointerLockElement !== canvas) { 
+            canvas.requestPointerLock();
+        } else {
+            editBlock();
+        }
+    };
 }
 
 function setupBuffer() {
