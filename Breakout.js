@@ -25,6 +25,7 @@ var FSHADER_SOURCE =
 let canvas;
 let gl;
 
+let g_mouseSensitivity = 1;
 let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only send position)
 let g_camera = new Camera();
 
@@ -105,6 +106,8 @@ function mouseMove(e) {
     } else if (x < 0) {
       moveDirection = -1;
     }
+
+    moveDirection *= g_mouseSensitivity;
 }
 
 function pointerLockChange(){
@@ -143,8 +146,6 @@ function setupMouseControl() {
            document.mozPointerLockElement !== canvas &&
            document.webkitPointerLockElement !== canvas) { 
             canvas.requestPointerLock();
-        } else {
-            editBlock();
         }
     };
 }
