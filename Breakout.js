@@ -40,8 +40,9 @@ let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only s
 let g_camera = new Camera();
 
 let g_ball = new Ball();
-let g_tile = new Tile();
 let g_paddle = new Paddle();
+
+let g_tiles;
 
 let a_Position;
 let u_ModelMatrix;
@@ -54,6 +55,8 @@ function main() {
   initalizeShaders();
   connectVariablesToGLSL();
   setupBuffer();
+
+  g_tiles = TileGrid.generateGrid(7, 7, 0.3);
 
   // Controls setup
   setupMouseControl();
@@ -90,8 +93,11 @@ function renderAllShapes() {
 
 
   /* CUBES */
-  // Draw g_tile
-  g_tile.cube.render();
+
+  // Draw tiles
+  g_tiles.forEach((t) => {
+    t.cube.render();
+  });
   
   // Draw g_paddle
   g_paddle.cube.render(); 
