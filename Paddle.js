@@ -4,9 +4,9 @@ class Paddle {
     this.cube = new Cube();
 
     // TODO place into position
-    this.cube.modelMatrix.translate(0, 0, 0); // Inital position
+    this.cube.modelMatrix.translate(0, -9.5, 0); // Inital position
     // TODO scale to desired size
-    this.cube.modelMatrix.scale(1, 1, 1);
+    this.cube.modelMatrix.scale(1.3, 0.3, 0.3);
   }
 
   move(moveDirection) {
