@@ -96,7 +96,16 @@ function renderAllShapes() {
 
 function mouseMove(e) {
     // Only use the x direction since paddle moves horizontally
-    moveDirection = new Vector3([e.movementX, 0, 0]);
+    let x = e.movementX; 
+    let moveDirection;
+   
+    // Check for == 0 to avoid NaN when normalizing since diving by magnitude
+    if (x != 0) {
+      moveDirection = new Vector3([e.movementX, 0, 0]);
+      moveDirection.normalize();
+    } else {
+      moveDirection = new Vector3([0, 0, 0]);
+    }
     
     console.log(moveDirection);
 }
@@ -120,7 +129,6 @@ function setupMouseControl() {
     canvas.requestPointerLock = canvas.requestPointerLock ||
         canvas.mozRequestPointerLock ||
         canvas.webkitRequestPointerLock;
-
     document.exitPointerLock = document.exitPointerLock ||
         document.mozExitPointerLock ||
         document.webkitExitPointerLock;
