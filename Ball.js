@@ -6,8 +6,6 @@ class Ball {
 
     this.sphere.positionMatrix.setTranslate(0, -8.75, 0); // Inital position
     this.sphere.scaleMatrix.setScale(0.35, 0.35, 0.35);
-    //this.sphere.scaleMatrix.translate(0, -8.75, 0);
-    //this.sphere.scaleMatrix.scale(0.35, 0.35, 0.35);
     console.log("ball", this.sphere.scaleMatrix);
   }
 

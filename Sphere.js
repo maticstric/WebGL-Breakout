@@ -6,7 +6,9 @@ class Sphere extends Model{
   }
 
   render() {
-    var modelMatrix = this.positionMatrix.multiply(this.scaleMatrix);
+    let modelMatrix = new Matrix4();
+    modelMatrix.set(this.positionMatrix);
+    modelMatrix.multiply(this.scaleMatrix);
 
     // To avoid rentering the same set of vertices into the vertex buffer
     if (g_modelInBuffer != SPHERE) {
