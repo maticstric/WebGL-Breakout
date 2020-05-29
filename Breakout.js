@@ -22,19 +22,20 @@ var FSHADER_SOURCE =
   }
   `;
 
-// Bounds for the ball in world coordiantes
+// Bounds for the ball and paddle in world coordiantes
 const EDGE_X = 9;
 const EDGE_Y = 10.3;
 
 const CUBE = 0; // ints used for identifying the current model in the vertex buffer
 const SPHERE = 1;
-let g_modelInBuffer;
 
 let g_mouseSensitivity = 0.3;
+let g_gameStarted = false;
 
 let canvas;
 let gl;
 
+let g_modelInBuffer;
 let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only send position)
 let g_camera = new Camera();
 
@@ -118,7 +119,12 @@ function mouseMove(e) {
   }
 
   moveDirection *= g_mouseSensitivity; // Apply mouse sensitivity
-  g_paddle.move(moveDirection); // Update the paddle position
+
+  g_paddle.mouseMove(moveDirection); // Update the paddle position
+
+  if (!g_gameStarted){
+    g_ball.mouseMove(moveDirection); // Update the ball position
+  }
 }
 
 function pointerLockChange(){

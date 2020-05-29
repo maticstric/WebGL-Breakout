@@ -9,7 +9,7 @@ class Paddle {
     this.cube.modelMatrix.scale(1.3, 0.3, 0.3);
   }
 
-  move(moveDirection) {
+  mouseMove(moveDirection) {
     this.cube.modelMatrix.translate(moveDirection, 0, 0);
   }
 

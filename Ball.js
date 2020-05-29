@@ -2,10 +2,14 @@ class Ball {
 
   constructor() {
     this.sphere = new Sphere();
-    this.velocity = new Vector3([-0.05, 0, 0]);
+    this.velocity = new Vector3([0, 0, 0]);
 
     this.sphere.modelMatrix.translate(0, -8.75, 0); // Inital position
     this.sphere.modelMatrix.scale(0.35, 0.35, 0.35);
+  }
+
+  mouseMove(moveDirection){
+    this.sphere.modelMatrix.translate(moveDirection, 0, 0);
   }
 
   move() {
