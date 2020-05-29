@@ -29,6 +29,7 @@ let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only s
 let g_camera = new Camera();
 
 let g_ball = new Ball();
+let g_tile = new Tile();
 
 let a_Position;
 let u_ModelMatrix;
@@ -75,18 +76,20 @@ function renderAllShapes() {
   /* CUBES */
   gl.bufferData(gl.ARRAY_BUFFER, Cube.vertices, gl.STATIC_DRAW);
 
-  let cube = new Cube();
-  cube.modelMatrix.rotate(45, 0, 1, 0);
-  cube.modelMatrix.rotate(45, 1, 0, 1);
-  cube.modelMatrix.scale(0.5, 0.5, 0.5);
+  //let cube = new Cube();
+  //cube.modelMatrix.translate(2, 2, 0);
+  //cube.modelMatrix.scale(0.5, 0.5, 0.5);
 
-  gl.uniformMatrix4fv(u_ModelMatrix, false, cube.modelMatrix.elements);
+  gl.uniformMatrix4fv(u_ModelMatrix, false, g_tile.cube.modelMatrix.elements);
   gl.drawArrays(gl.TRIANGLES, 0, Cube.vertices.length / g_dataPerVertex);
 
   /* SPHERES */
   gl.bufferData(gl.ARRAY_BUFFER, Sphere.vertices, gl.STATIC_DRAW);
 
   g_ball.move();
+
+  gl.uniformMatrix4fv(u_ModelMatrix, false, g_ball.sphere.modelMatrix.elements);
+  gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
 }
 
 function setupBuffer() {

@@ -2,7 +2,7 @@ class Ball {
 
   constructor() {
     this.sphere = new Sphere();
-    this.velocity = new Vector3([0, 0.05, 0]);
+    this.velocity = new Vector3([-0.05, 0, 0]);
     this.position = new Vector3([2, 0, 0]);
 
     // Some initialization
@@ -12,6 +12,8 @@ class Ball {
 
     this.sphere.modelMatrix.translate(x, y, z);
     this.sphere.modelMatrix.scale(0.2, 0.2, 0.2);
+
+    console.log(this.sphere.modelMatrix);
   }
 
   move() {
@@ -22,8 +24,5 @@ class Ball {
     let z = this.velocity.elements[2];
 
     this.sphere.modelMatrix.translate(x, y, z);
-
-    gl.uniformMatrix4fv(u_ModelMatrix, false, this.sphere.modelMatrix.elements);
-    gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
   }
 }
