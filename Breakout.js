@@ -23,7 +23,7 @@ var FSHADER_SOURCE =
   `;
 
 const SLIDER_LENGTH = 100;
-const MAX_SENSITIVITY = 0.5;
+const MAX_SENSITIVITY = 0.1;
 
 // Bounds for the ball and paddle in world coordiantes
 const EDGE_X = 9;
@@ -127,19 +127,7 @@ function startGame() {
 
 function mouseMove(e) {
   // Only use the x direction since paddle moves horizontally
-  let x = e.movementX; 
-  let moveDirection;
- 
-  // Normalize horizontal movement
-  if (x > 0) {
-    moveDirection = 1;
-  } else if (x < 0) {
-    moveDirection = -1;
-  } else {
-    moveDirection = 0;
-  }
-
-  moveDirection *= g_mouseSensitivity; // Apply mouse sensitivity
+  let moveDirection = e.movementX * g_mouseSensitivity; 
 
   g_paddle.mouseMove(moveDirection); // Update the paddle position
 
