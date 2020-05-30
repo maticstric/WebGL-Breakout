@@ -5,8 +5,8 @@ const Z = 2;
 
 // For accessing matrices inside class
 const MATRIX_X = 12;
-const MATIRX_Y = 13;
-const MATIRX_Z = 14;
+const MATRIX_Y = 13;
+const MATRIX_Z = 14;
 
 class GameObject {
   translate(x, y, z) {
@@ -27,8 +27,8 @@ class GameObject {
 
   get position() {
     let x = this.model.positionMatrix.elements[MATRIX_X];
-    let y = this.model.positionMatrix.elements[MATIRX_Y];
-    let z = this.model.positionMatrix.elements[MATIRX_Z];
+    let y = this.model.positionMatrix.elements[MATRIX_Y];
+    let z = this.model.positionMatrix.elements[MATRIX_Z];
 
     return new Vector3([x, y, z]);
   }
@@ -39,8 +39,8 @@ class GameObject {
     let z = this.elements[Z];
 
     this.model.positionMatrix.elements[MATRIX_X] = x;
-    this.model.positionMatrix.elements[MATIRX_Y] = y;
-    this.model.positionMatrix.elements[MATIRX_Z] = z;
+    this.model.positionMatrix.elements[MATRIX_Y] = y;
+    this.model.positionMatrix.elements[MATRIX_Z] = z;
   }
 
   get positionX() {
@@ -65,6 +65,31 @@ class GameObject {
 
   set positionZ(n) {
     this.model.positionMatrix.elements[MATRIX_Z] = n;
+  }
+
+  // From a list of points/positions (given as Vector3) figures out if 
+  // any (and if so which one) are inside the object. Returns the index 
+  // of the first one it sees.
+  arePointsInside(points) {
+    for (let i = 0; i < points.length; i++) {
+      let p = points[i];
+
+      let x = p.elements[0];    
+      let y = p.elements[1];    
+      let z = p.elements[2];    
+
+      if (x > this.positionX - this.width / 2) {
+        if (x < this.positionX + this.width / 2) {
+          if (y > this.positionY - this.height / 2) {
+            if (y < this.positionY + this.height / 2) {
+              return i; 
+            }
+          }
+        }
+      }
+    }
+
+    return null;
   }
 
   constructor() {
