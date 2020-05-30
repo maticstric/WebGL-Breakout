@@ -9,6 +9,14 @@ const MATIRX_Y = 13;
 const MATIRX_Z = 14;
 
 class GameObject {
+  translate(x, y, z) {
+    this.model.positionMatrix.translate(x, y, z);
+  }
+
+  scale(x, y, z) {
+    this.model.positionMatrix.scale(x, y, z);
+  }
+
   get position() {
     let x = this.model.positionMatrix.elements[MATRIX_X];
     let y = this.model.positionMatrix.elements[MATIRX_Y];
