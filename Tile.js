@@ -5,7 +5,5 @@ class Tile extends GameObject{
     super();
 
     this.model = new Cube();
-
-    this.scale(Tile.length, 0.3, 0.3);
   }
 }

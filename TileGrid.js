@@ -13,14 +13,15 @@ class TileGrid {
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         let t = new Tile();
-        let width = t.cube.scaleMatrix.elements[0] * 2;
-        let height = t.cube.scaleMatrix.elements[5] * 2;
+        t.scale(Tile.length, 0.3, 0.3);
+        let width = t.model.scaleMatrix.elements[0] * 2;
+        let height = t.model.scaleMatrix.elements[5] * 2;
 
         let x = -(margin * ((cols - 1) / 2) + width * ((cols - 1) / 2)) + c * (width + margin);
         let y = -(margin * ((rows - 1) / 2) + height * ((rows - 1) / 2)) + r * (height + margin);
         let z = 0;
 
-        t.cube.positionMatrix.translate(x, y, z);
+        t.model.positionMatrix.translate(x, y, z);
 
         tiles.push(t);
       } 
@@ -36,13 +37,13 @@ class TileGrid {
 
     // We'll probably adjust all these numbers later
     
-    west.cube.scaleMatrix.setScale(WALL_THICKNESS, 10, WALL_THICKNESS);
-    north.cube.scaleMatrix.setScale(9, WALL_THICKNESS, WALL_THICKNESS);
-    east.cube.scaleMatrix.setScale(WALL_THICKNESS, 10, WALL_THICKNESS);
+    west.scale(WALL_THICKNESS, 10, WALL_THICKNESS);
+    north.scale(9, WALL_THICKNESS, WALL_THICKNESS);
+    east.scale(WALL_THICKNESS, 10, WALL_THICKNESS);
 
-    west.cube.positionMatrix.setTranslate(-EDGE_X, 0, 0);
-    north.cube.positionMatrix.setTranslate(0, EDGE_Y, 0);
-    east.cube.positionMatrix.setTranslate(EDGE_X, 0, 0);
+    west.translate(-EDGE_X, 0, 0);
+    north.translate(0, EDGE_Y, 0);
+    east.translate(EDGE_X, 0, 0);
 
     return [west, north, east];
   }
