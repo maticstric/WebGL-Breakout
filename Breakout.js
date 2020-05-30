@@ -43,6 +43,7 @@ let g_ball = new Ball();
 let g_paddle = new Paddle();
 
 let g_tiles;
+let g_walls;
 
 let a_Position;
 let u_ModelMatrix;
@@ -57,6 +58,7 @@ function main() {
   setupBuffer();
 
   g_tiles = TileGrid.generateGrid(7, 7, 0.3);
+  g_walls = TileGrid.generateWalls();
 
   // Controls setup
   setupMouseControl();
@@ -97,6 +99,11 @@ function renderAllShapes() {
   // Draw tiles
   g_tiles.forEach((t) => {
     t.cube.render();
+  });
+
+  // Draw walls
+  g_walls.forEach((w) => {
+    w.cube.render();
   });
   
   // Draw g_paddle
@@ -175,7 +182,6 @@ function setupMouseControl() {
       
       // Add listener to start game
       document.addEventListener('keydown', (event) => {
-        console.log(event.key);
         if (event.key === ' ') {
           startGame();
         }
