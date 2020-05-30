@@ -14,8 +14,9 @@ class TileGrid {
       for (let c = 0; c < cols; c++) {
         let t = new Tile();
         t.scale(Tile.length, 0.3, 0.3);
-        let width = t.model.scaleMatrix.elements[0] * 2;
-        let height = t.model.scaleMatrix.elements[5] * 2;
+
+        let width = t.width;
+        let height = t.height;
 
         let x = -(margin * ((cols - 1) / 2) + width * ((cols - 1) / 2)) + c * (width + margin);
         let y = -(margin * ((rows - 1) / 2) + height * ((rows - 1) / 2)) + r * (height + margin);

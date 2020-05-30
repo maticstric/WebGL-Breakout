@@ -15,7 +15,7 @@ class Paddle extends GameObject{
   }
 
   mouseMove(moveDirection) {
-    this.model.positionMatrix.translate(moveDirection, 0, 0);
+    this.translate(moveDirection, 0, 0);
 
     // Keep paddle from going off the right edge
     if (this.rightEdge > TileGrid.eastEdge) {

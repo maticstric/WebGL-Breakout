@@ -15,7 +15,7 @@ class Ball extends GameObject{
   move() {
     if (g_gameStarted) {
       // Update position based on velocity if the game has started
-      this.translate(velocityX, velocityY, velocityZ);
+      this.translate(this.velocityX, this.velocityY, this.velocityZ);
     } else {
       // Otherwise constrain it to the paddle
       this.positionX =  g_paddle.positionX;

@@ -17,6 +17,14 @@ class GameObject {
     this.model.scaleMatrix.scale(x, y, z);
   }
 
+  get width() {
+    return this.model.scaleMatrix.elements[0] * 2
+  }
+
+  get height() {
+    return this.model.scaleMatrix.elements[5] * 2
+  }
+
   get position() {
     let x = this.model.positionMatrix.elements[MATRIX_X];
     let y = this.model.positionMatrix.elements[MATIRX_Y];
