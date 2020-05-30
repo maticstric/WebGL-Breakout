@@ -18,11 +18,11 @@ class GameObject {
   }
 
   get width() {
-    return this.model.scaleMatrix.elements[0] * 2
+    return this.model.scaleMatrix.elements[0] * 2;
   }
 
   get height() {
-    return this.model.scaleMatrix.elements[5] * 2
+    return this.model.scaleMatrix.elements[5] * 2;
   }
 
   get position() {
