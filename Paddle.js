@@ -2,8 +2,9 @@
 const PADDLE_LENGTH = 1.3;
 
 class Paddle {
-  get rightEdge(){return this.position[X] + PADDLE_LENGTH;}
+
   get leftEdge(){return this.position[X] - PADDLE_LENGTH;}
+  get rightEdge(){return this.position[X] + PADDLE_LENGTH;}
 
   constructor() {
     this.cube = new Cube();

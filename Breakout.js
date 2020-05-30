@@ -22,11 +22,6 @@ var FSHADER_SOURCE =
   }
   `;
 
-// Indices for translation coordinates in matrices
-const X = 12;                                                                    
-const Y = 13;                                                                                                   
-const Z = 14; 
-
 const SLIDER_LENGTH = 100;
 const MAX_SENSITIVITY = 0.1;
 

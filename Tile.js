@@ -1,10 +1,17 @@
+// Length from the middle of the Tile
+const TILE_LENGTH = 1;
+
 class Tile {
+  get leftEdge(){return this.position[X] - TILE_LENGTH;}
 
   constructor() {
     this.cube = new Cube();
 
+    // Position variable for easier acces to coordinates
+    this.position = this.cube.positionMatrix.elements;
+
     this.cube.positionMatrix.setTranslate(0, 0, 0); // Initial position
-    this.cube.scaleMatrix.setScale(1, 0.3, 0.3);
+    this.cube.scaleMatrix.setScale(TILE_LENGTH, 0.3, 0.3);
   }
 
   position() {
