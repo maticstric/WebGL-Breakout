@@ -1,4 +1,9 @@
+const EDGE_X = 9;
+const EDGE_Y = 10.4; 
+
 class TileGrid {
+  static get EDGE_X (){return EDGE_X;}
+  static get EDGE_Y (){return EDGE_Y;}
 
   static generateGrid(rows, cols, margin) {
     let tiles = [];
@@ -33,9 +38,9 @@ class TileGrid {
     north.cube.scaleMatrix.setScale(9, 0.5, 0.5);
     east.cube.scaleMatrix.setScale(0.5, 10, 0.5);
 
-    west.cube.positionMatrix.setTranslate(-9, 0, 0);
-    north.cube.positionMatrix.setTranslate(0, 10, 0);
-    east.cube.positionMatrix.setTranslate(9, 0, 0);
+    west.cube.positionMatrix.setTranslate(-this.EDGE_X, 0, 0);
+    north.cube.positionMatrix.setTranslate(0, this.EDGE_Y, 0);
+    east.cube.positionMatrix.setTranslate(this.EDGE_X, 0, 0);
 
     return [west, north, east];
   }

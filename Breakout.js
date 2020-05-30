@@ -25,10 +25,6 @@ var FSHADER_SOURCE =
 const SLIDER_LENGTH = 100;
 const MAX_SENSITIVITY = 0.1;
 
-// Bounds for the ball and paddle in world coordiantes
-const EDGE_X = 9;
-const EDGE_Y = 10.3;
-
 const CUBE = 0; // ints used for identifying the current model in the vertex buffer
 const SPHERE = 1;
 
