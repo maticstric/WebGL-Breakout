@@ -97,23 +97,23 @@ function renderAllShapes() {
 
   // Draw tiles
   g_tiles.forEach((t) => {
-    t.cube.render();
+    t.model.render();
   });
 
   // Draw walls
   g_walls.forEach((w) => {
-    w.cube.render();
+    w.model.render();
   });
   
   // Draw g_paddle
-  g_paddle.cube.render(); 
+  g_paddle.model.render(); 
 
   /* SPHERES */
   // Update ball position
   g_ball.move();
 
   // Draw g_ball
-  g_ball.sphere.render(); 
+  g_ball.model.render(); 
 }
 
 function startGame() {
