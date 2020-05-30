@@ -4,9 +4,8 @@ const EDGE_Y = 10.4;
 const WALL_THICKNESS = 0.5;
 
 class TileGrid {
-  static get EDGE_X(){return EDGE_X;}
-  static get EDGE_Y(){return EDGE_Y;}
-  static get WALL_THICKNESS (){return WALL_THICKNESS;}
+  static get eastEdge(){return EDGE_X - WALL_THICKNESS;}
+  static get westEdge(){return -EDGE_X + WALL_THICKNESS;}
 
   static generateGrid(rows, cols, margin) {
     let tiles = [];
@@ -41,9 +40,9 @@ class TileGrid {
     north.cube.scaleMatrix.setScale(9, WALL_THICKNESS, WALL_THICKNESS);
     east.cube.scaleMatrix.setScale(WALL_THICKNESS, 10, WALL_THICKNESS);
 
-    west.cube.positionMatrix.setTranslate(-this.EDGE_X, 0, 0);
-    north.cube.positionMatrix.setTranslate(0, this.EDGE_Y, 0);
-    east.cube.positionMatrix.setTranslate(this.EDGE_X, 0, 0);
+    west.cube.positionMatrix.setTranslate(-EDGE_X, 0, 0);
+    north.cube.positionMatrix.setTranslate(0, EDGE_Y, 0);
+    east.cube.positionMatrix.setTranslate(EDGE_X, 0, 0);
 
     return [west, north, east];
   }
