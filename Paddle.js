@@ -5,7 +5,6 @@ class Paddle {
 
     this.cube.positionMatrix.setTranslate(0, -9.5, 0); // Inital position
     this.cube.scaleMatrix.setScale(1.3, 0.3, 0.3);
-    console.log("paddle", this.cube.positionMatrix);
   }
 
   mouseMove(moveDirection) {

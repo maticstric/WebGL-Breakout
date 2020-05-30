@@ -125,8 +125,6 @@ function mouseMove(e) {
 
   moveDirection *= g_mouseSensitivity; // Apply mouse sensitivity
 
-  console.log(moveDirection);
-
   g_paddle.mouseMove(moveDirection); // Update the paddle position
 
   if (!g_gameStarted){
