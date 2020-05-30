@@ -61,7 +61,7 @@ function main() {
   setupBuffer();
 
   setupHTMLElements();
-  setupMouseControl();
+  setupControls();
 
   g_tiles = TileGrid.generateGrid(7, 7, 0.3);
   g_walls = TileGrid.generateWalls();
@@ -160,7 +160,7 @@ function pointerLockChange(){
   }
 }
 
-function setupMouseControl() {
+function setupControls() {
   // Pointer lock setup to work for several browsers
   canvas.requestPointerLock = canvas.requestPointerLock ||
     canvas.mozRequestPointerLock ||
@@ -182,15 +182,15 @@ function setupMouseControl() {
       document.mozPointerLockElement !== canvas &&
       document.webkitPointerLockElement !== canvas) { 
       canvas.requestPointerLock();
-      
-      // Add listener to start game
-      document.addEventListener('keydown', (event) => {
-        if (event.key === ' ') {
-          startGame();
-        }
-      });
     }
   };
+
+  // Add listener to start game
+  document.addEventListener('keydown', (event) => {
+    if (event.key === ' ') {
+      startGame();
+    }
+  });
 }
 
 function setupHTMLElements() {
