@@ -14,7 +14,7 @@ class GameObject {
   }
 
   scale(x, y, z) {
-    this.model.positionMatrix.scale(x, y, z);
+    this.model.scaleMatrix.scale(x, y, z);
   }
 
   get position() {
