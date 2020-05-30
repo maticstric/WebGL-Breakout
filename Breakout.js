@@ -22,6 +22,9 @@ var FSHADER_SOURCE =
   }
   `;
 
+const SLIDER_LENGTH = 100;
+const MAX_SENSITIVITY = 0.5;
+
 // Bounds for the ball and paddle in world coordiantes
 const EDGE_X = 9;
 const EDGE_Y = 10.3;
@@ -29,7 +32,7 @@ const EDGE_Y = 10.3;
 const CUBE = 0; // ints used for identifying the current model in the vertex buffer
 const SPHERE = 1;
 
-let g_mouseSensitivity = 0.3;
+let g_mouseSensitivity = MAX_SENSITIVITY / 2;
 let g_gameStarted = false;
 
 let canvas;
@@ -54,6 +57,8 @@ function main() {
   initalizeShaders();
   connectVariablesToGLSL();
   setupBuffer();
+
+  setupHTMLElements();
 
   // Controls setup
   setupMouseControl();
@@ -120,6 +125,8 @@ function mouseMove(e) {
 
   moveDirection *= g_mouseSensitivity; // Apply mouse sensitivity
 
+  console.log(moveDirection);
+
   g_paddle.mouseMove(moveDirection); // Update the paddle position
 
   if (!g_gameStarted){
@@ -163,6 +170,12 @@ function setupMouseControl() {
       canvas.requestPointerLock();
     }
   };
+}
+
+function setupHTMLElements() {
+    document.getElementById("sensitivity").oninput = function() {
+      g_mouseSensitivity = this.value / SLIDER_LENGTH * MAX_SENSITIVITY;
+    };
 }
 
 function setupBuffer() {
