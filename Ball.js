@@ -8,16 +8,19 @@ class Ball {
     this.sphere.scaleMatrix.setScale(0.35, 0.35, 0.35);
   }
 
-  mouseMove(moveDirection){
-    this.sphere.positionMatrix.translate(moveDirection, 0, 0);
-  }
-
   move() {
-    let x = this.velocity.elements[0];
-    let y = this.velocity.elements[1];
-    let z = this.velocity.elements[2];
+    if (g_gameStarted) {
+      // Update position based on velocity if the game has started
+      let x = this.velocity.elements[0];
+      let y = this.velocity.elements[1];
+      let z = this.velocity.elements[2];
 
-    this.sphere.positionMatrix.translate(x, y, z);
+      this.sphere.positionMatrix.translate(x, y, z);
+    } else {
+      // Otherwise constrain it to the paddle
+      let position = this.sphere.positionMatrix.elements;
+      position[X] =  g_paddle.position[X];
+    }
   }
 
   position() {

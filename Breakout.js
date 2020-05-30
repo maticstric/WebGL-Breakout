@@ -22,6 +22,11 @@ var FSHADER_SOURCE =
   }
   `;
 
+// Indices for translation coordinates in matrices
+const X = 12;                                                                    
+const Y = 13;                                                                                                   
+const Z = 14; 
+
 const SLIDER_LENGTH = 100;
 const MAX_SENSITIVITY = 0.1;
 
@@ -126,10 +131,6 @@ function mouseMove(e) {
   let moveDirection = e.movementX * g_mouseSensitivity; 
 
   g_paddle.mouseMove(moveDirection); // Update the paddle position
-
-  if (!g_gameStarted){
-    g_ball.mouseMove(moveDirection); // Update the ball position
-  }
 }
 
 function pointerLockChange(){

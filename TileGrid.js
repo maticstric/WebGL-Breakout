@@ -1,10 +1,11 @@
 const EDGE_X = 9;
 const EDGE_Y = 10.4; 
+// Thickness from the middle of the wall
 const WALL_THICKNESS = 0.5;
 
 class TileGrid {
-  static get EDGE_X (){return EDGE_X;}
-  static get EDGE_Y (){return EDGE_Y;}
+  static get EDGE_X(){return EDGE_X;}
+  static get EDGE_Y(){return EDGE_Y;}
   static get WALL_THICKNESS (){return WALL_THICKNESS;}
 
   static generateGrid(rows, cols, margin) {
