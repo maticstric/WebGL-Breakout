@@ -5,7 +5,6 @@ class Tile {
 
     this.cube.positionMatrix.setTranslate(0, 0, 0); // Initial position
     this.cube.scaleMatrix.setScale(1, 0.3, 0.3);
-    console.log("tile", this.cube.positionMatrix);
   }
 
   position() {
