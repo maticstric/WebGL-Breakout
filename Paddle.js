@@ -1,40 +1,30 @@
 // Length from the middle of the paddle
-const PADDLE_LENGTH = 1.3;
 
-class Paddle {
+class Paddle extends GameObject{
+  static get length() {return 1.3;}
 
-  get leftEdge(){return this.position[X] - PADDLE_LENGTH;}
-  get rightEdge(){return this.position[X] + PADDLE_LENGTH;}
+  get leftEdge() {return this.positionX - Paddle.length;}
+  get rightEdge() {return this.positionX + Paddle.length;}
 
   constructor() {
-    this.cube = new Cube();
+    super();
+    this.model = new Cube();
 
-    // Position variable for easier acces to coordinates
-    this.position = this.cube.positionMatrix.elements;
-
-    this.cube.positionMatrix.setTranslate(0, -9.5, 0); // Inital position
-    this.cube.scaleMatrix.setScale(PADDLE_LENGTH, 0.3, 0.3);
+    this.model.positionMatrix.setTranslate(0, -9.5, 0); // Inital position
+    this.model.scaleMatrix.setScale(this.constructor.length, 0.3, 0.3);
   }
 
   mouseMove(moveDirection) {
-    this.cube.positionMatrix.translate(moveDirection, 0, 0);
+    this.model.positionMatrix.translate(moveDirection, 0, 0);
 
     // Keep paddle from going off the right edge
     if (this.rightEdge > TileGrid.eastEdge) {
-      this.position[X] = TileGrid.eastEdge - PADDLE_LENGTH;
+      this.positionX = TileGrid.eastEdge - Paddle.length;
     }
 
     // Keep paddle from going off the left edge
     if (this.leftEdge < TileGrid.westEdge) {
-      this.position[X] = TileGrid.westEdge + PADDLE_LENGTH;
+      this.positionX = TileGrid.westEdge + Paddle.length;
     }
-  }
-
-  position() {
-    let x = this.cube.positionMatrix.elements[12];
-    let y = this.cube.positionMatrix.elements[13];
-    let z = this.cube.positionMatrix.elements[14];
-
-    return new Vector3([x, y, z]);
   }
 }
