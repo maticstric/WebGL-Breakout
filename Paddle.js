@@ -10,8 +10,8 @@ class Paddle extends GameObject{
     super();
     this.model = new Cube();
 
-    this.model.positionMatrix.setTranslate(0, -9.5, 0); // Inital position
-    this.model.scaleMatrix.setScale(this.constructor.length, 0.3, 0.3);
+    this.translate(0, -9.5, 0);
+    this.scale(this.constructor.length, 0.3, 0.3);
   }
 
   mouseMove(moveDirection) {
