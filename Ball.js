@@ -1,6 +1,6 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get colliderSubdivision () {return 10;}
+  static get colliderSubdivision () {return 16;}
 
   get velocityX() {return this.velocity.elements[0];}
   get velocityY() {return this.velocity.elements[1];}
@@ -33,15 +33,15 @@ class Ball extends GameObject {
   }
 
   checkTileCollisions() {
-    let pointInsideIndex = null;
+    let pointsInside = null;
 
     for (let i = 0; i < g_tiles.length; i++) {
       let t = g_tiles[i];
 
-      pointInsideIndex = t.arePointsInside(this.collisionPoints); // Check if any points are inside
+      pointsInside = t.arePointsInside(this.collisionPoints); // Check if any points are inside
 
-      if (pointInsideIndex !== null) { // Collision happened
-        this.bounce(pointInsideIndex);
+      if (pointsInside.length > 0) { // Collision happened
+        this.bounce(pointsInside);
 
         g_tiles.splice(i, 1);
       }
@@ -49,7 +49,7 @@ class Ball extends GameObject {
   }
 
   checkPaddleWallCollisions() {
-    let pointInsideIndex = null;
+    let pointsInside = null;
     let paddleAndWalls = [];
 
     paddleAndWalls = paddleAndWalls.concat(g_walls);
@@ -58,24 +58,38 @@ class Ball extends GameObject {
     for (let i = 0; i < paddleAndWalls.length; i++) {
       let t = paddleAndWalls[i];
 
-      pointInsideIndex = t.arePointsInside(this.collisionPoints); // Check if any points are inside
+      pointsInside = t.arePointsInside(this.collisionPoints); // Check if any points are inside
 
-      if (pointInsideIndex !== null) { // Collision happened
-        this.bounce(pointInsideIndex);
+      if (pointsInside.length > 0) { // Collision happened
+        this.bounce(pointsInside);
       }
     }
   }
 
-  bounce(pointInsideIndex) {
-    let velocityMagnitude = this.velocity.magnitude();
-    let bounce = this.position;
-    bounce.sub(pointInsideIndex);
-    bounce.normalize();
-    bounce.mul(velocityMagnitude);
+  bounce(pointsInside) {
+    // reflection formula r = d - 2 * dot(d, n) * n
+    // r is the reflection of d accross n, n must be normalized
 
-    this.velocity.add(bounce);
-    this.velocity.normalize();
-    this.velocity.mul(velocityMagnitude);
+    let n = new Vector3([0, 0, 0]);
+    // Find the normal vector in between the all the pointsInside and 
+    for (let point of pointsInside){
+      point.sub(this.position);
+      point.normalize();
+      n.add(point);
+    }
+    n.normalize();
+    // Invert it to serve as the reflection axis
+    n.mul(-1);
+
+    // Set the incident vector
+    let d = new Vector3([0, 0, 0]);
+    d.set(this.velocity);
+
+    n.mul(Vector3.dot(d, n) * -2); // -2 * dot(d, n) * n
+
+    d.add(n); // d - 2 * dot(d, n) * n
+
+    this.velocity.set(d);
   }
 
   get collisionPoints() {

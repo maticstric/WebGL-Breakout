@@ -71,9 +71,10 @@ class GameObject {
   }
 
   // From a list of points/positions (given as Vector3) figures out if 
-  // any (and if so which one) are inside the object. Returns the first 
-  // point it sees
+  // any (and if so which one) are inside the object and returns them
   arePointsInside(points) {
+    let pointsInside = [];
+
     for (let i = 0; i < points.length; i++) {
       let p = points[i];
 
@@ -85,14 +86,14 @@ class GameObject {
         if (x < this.positionX + this.width / 2) {
           if (y > this.positionY - this.height / 2) {
             if (y < this.positionY + this.height / 2) {
-              return p; 
+              pointsInside.push(p);
             }
           }
         }
       }
     }
 
-    return null;
+    return pointsInside;
   }
 
   constructor() {
