@@ -48,7 +48,7 @@ class Ball extends GameObject {
 
       if (pointsInside.length > 0) { // Collision happened
         if (object instanceof Paddle && this.canHitPaddle){
-          this.bounce(pointsInside);
+          this.paddleBounce();
           this.canHitPaddle = false;
         } else if (!(object instanceof Paddle)) {
           this.bounce(pointsInside);
@@ -60,6 +60,16 @@ class Ball extends GameObject {
         }
       }
     }
+  }
+
+  paddleBounce() {
+    // Percentage away from center
+    let collisionPoint = (this.positionX - g_paddle.positionX) / (g_paddle.width / 2);
+
+    // Makes 45 deg the largest angle (assuming no bounces from edges of paddle)
+    let angle = collisionPoint * Math.PI / 4; 
+
+    this.velocity = new Vector3([Math.sin(angle), Math.cos(angle), 0]).mul(this.velocity.magnitude()); 
   }
 
   bounce(pointsInside) {
