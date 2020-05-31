@@ -1,4 +1,7 @@
 class Ball extends GameObject {
+  // Division of the collider as an angle
+  static get colliderSubdivision () {return 90;}
+
   get velocityX() {return this.velocity.elements[0];}
   get velocityY() {return this.velocity.elements[1];}
   get velocityZ() {return this.velocity.elements[2];}
@@ -79,11 +82,13 @@ class Ball extends GameObject {
 
     let points = [];
 
-    // Points defined clockwise starting at north
-    points.push(new Vector3([this.positionX, this.positionY + radius, this.positionZ]));  
-    points.push(new Vector3([this.positionX + radius, this.positionY, this.positionZ]));  
-    points.push(new Vector3([this.positionX, this.positionY - radius, this.positionZ]));  
-    points.push(new Vector3([this.positionX - radius, this.positionY, this.positionZ]));  
+    // Points defined counterclockwise starting at east
+    for (let deg = 0; deg < 360; deg += this.colliderSubdivision){
+      let rad = deg * Math.PI / 180;
+
+      points.push(new Vector3([this.positionX + Math.cos(rad) * radius,
+                               this.positionY + Math.sin(rad) * radius, 0]));  
+    }
 
     return points;
   }
