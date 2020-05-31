@@ -1,8 +1,3 @@
-// For accessing vectors inside and outside class
-const X = 0;
-const Y = 1;
-const Z = 2;
-
 // For accessing matrices inside class
 const MATRIX_X = 12;
 const MATRIX_Y = 13;
@@ -10,6 +5,14 @@ const MATRIX_Z = 14;
 
 class GameObject {
   translate(x, y, z) {
+    this.model.positionMatrix.translate(x, y, z);
+  }
+
+  translateVect(v) {
+    let x = v.elements[0];
+    let y = v.elements[1];
+    let z = v.elements[2];
+
     this.model.positionMatrix.translate(x, y, z);
   }
 

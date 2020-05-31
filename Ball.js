@@ -3,6 +3,10 @@ class Ball extends GameObject {
   get velocityY() {return this.velocity.elements[1];}
   get velocityZ() {return this.velocity.elements[2];}
 
+  set velocityX(n) {this.velocity.elements[0] = n;}
+  set velocityY(n) {this.velocity.elements[1] = n;}
+  set velocityZ(n) {this.velocity.elements[2] = n;}
+
   constructor() {
     super();
     this.model = new Sphere();
@@ -15,7 +19,7 @@ class Ball extends GameObject {
   move() {
     if (g_gameStarted) {
       // Update position based on velocity if the game has started
-      this.translate(this.velocityX, this.velocityY, this.velocityZ);
+      this.translateVect(this.velocity);
 
       this.checkTileCollisions();
       this.checkPaddleWallCollisions();
@@ -61,11 +65,11 @@ class Ball extends GameObject {
 
   bounce(pointInsideIndex) {
     if (pointInsideIndex === 0 || pointInsideIndex === 2) { // North or south
-      this.velocity.elements[1] *= -1;
+      this.velocityY *= -1;
     }
 
     if (pointInsideIndex === 1 || pointInsideIndex === 3) { // East or west
-      this.velocity.elements[0] *= -1;
+      this.velocityX *= -1;
     }
   }
 
@@ -76,10 +80,10 @@ class Ball extends GameObject {
     let points = [];
 
     // Points defined clockwise starting at north
-    points.push(new Vector3([position.elements[0], position.elements[1] + radius, position.elements[2]]));  
-    points.push(new Vector3([position.elements[0] + radius, position.elements[1], position.elements[2]]));  
-    points.push(new Vector3([position.elements[0], position.elements[1] - radius, position.elements[2]]));  
-    points.push(new Vector3([position.elements[0] - radius, position.elements[1], position.elements[2]]));  
+    points.push(new Vector3([this.positionX, this.positionY + radius, this.positionZ]));  
+    points.push(new Vector3([this.positionX + radius, this.positionY, this.positionZ]));  
+    points.push(new Vector3([this.positionX, this.positionY - radius, this.positionZ]));  
+    points.push(new Vector3([this.positionX - radius, this.positionY, this.positionZ]));  
 
     return points;
   }
