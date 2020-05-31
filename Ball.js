@@ -1,6 +1,6 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get colliderSubdivision () {return 90;}
+  static get colliderSubdivision () {return 10;}
 
   get velocityX() {return this.velocity.elements[0];}
   get velocityY() {return this.velocity.elements[1];}
@@ -67,23 +67,25 @@ class Ball extends GameObject {
   }
 
   bounce(pointInsideIndex) {
-    if (pointInsideIndex === 0 || pointInsideIndex === 2) { // North or south
-      this.velocityY *= -1;
-    }
+    let velocityMagnitude = this.velocity.magnitude();
+    let bounce = this.position;
+    bounce.sub(pointInsideIndex);
+    bounce.normalize();
+    bounce.mul(velocityMagnitude);
 
-    if (pointInsideIndex === 1 || pointInsideIndex === 3) { // East or west
-      this.velocityX *= -1;
-    }
+    this.velocity.add(bounce);
+    this.velocity.normalize();
+    this.velocity.mul(velocityMagnitude);
   }
 
   get collisionPoints() {
     let radius = this.width / 2; 
-    let position = this.position; 
+    let increment = 360 / Ball.colliderSubdivision;
 
     let points = [];
 
     // Points defined counterclockwise starting at east
-    for (let deg = 0; deg < 360; deg += this.colliderSubdivision){
+    for (let deg = 0; deg < 360; deg += increment){
       let rad = deg * Math.PI / 180;
 
       points.push(new Vector3([this.positionX + Math.cos(rad) * radius,
