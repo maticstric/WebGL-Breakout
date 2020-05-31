@@ -91,7 +91,6 @@ class Ball extends GameObject {
   get collisionPoints() {
     let radius = this.width / 2; 
     let increment = 360 / Ball.colliderSubdivision;
-
     let points = [];
 
     // Points defined counterclockwise starting at east
