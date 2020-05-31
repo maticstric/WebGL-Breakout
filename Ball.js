@@ -57,6 +57,7 @@ class Ball extends GameObject {
 
         if (object instanceof Tile) {
           g_tiles.splice(i, 1);
+          objects.splice(i, 1);
         }
       }
     }
