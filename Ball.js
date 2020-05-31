@@ -1,6 +1,6 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get colliderSubdivision () {return 16;}
+  static get colliderSubdivision () {return 48;}
 
   get velocityX() {return this.velocity.elements[0];}
   get velocityY() {return this.velocity.elements[1];}
@@ -41,14 +41,21 @@ class Ball extends GameObject {
     objects = objects.concat(g_paddle);
 
     for (let i = 0; i < objects.length; i++) {
-      let t = objects[i];
+      let object = objects[i];
 
-      pointsInside = t.arePointsInside(this.collisionPoints); // Check if any points are inside
+      // Check if any points are inside
+      pointsInside = object.arePointsInside(this.collisionPoints); 
 
       if (pointsInside.length > 0) { // Collision happened
-        this.bounce(pointsInside);
+        if (object instanceof Paddle && this.canHitPaddle){
+          this.bounce(pointsInside);
+          this.canHitPaddle = false;
+        } else if (!(object instanceof Paddle)) {
+          this.bounce(pointsInside);
+          this.canHitPaddle = true;
+        }
 
-        if (t instanceof Tile) {
+        if (object instanceof Tile) {
           g_tiles.splice(i, 1);
         }
       }
