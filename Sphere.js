@@ -3,7 +3,7 @@ class Sphere extends Model{
 
   constructor(color) {
     super();
-    this.vertices = initVertices(color);
+    this.vertices = this.initVertices(color);
   }
 
   initVertices(color) {
