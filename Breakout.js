@@ -34,8 +34,7 @@ let g_gameStarted = false;
 let canvas;
 let gl;
 
-let g_modelInBuffer;
-let g_dataPerVertex = 3; // How much data we send per vertex (3 rn b/c we only send position)
+let g_dataPerVertex = 12;
 let g_camera = new Camera();
 
 let g_ball = new Ball();
@@ -190,11 +189,23 @@ function setupBuffer() {
   // Bind the buffer object to target
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 
-  let FLOAT_SIZE = Float32Array.BYTES_PER_ELEMENT;
+  let F_SIZE = Float32Array.BYTES_PER_ELEMENT;
 
   // Assign the buffer object to a_Position variable and enable
-  gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, g_dataPerVertex * FLOAT_SIZE, 0);
+  gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, F_SIZE * g_dataPerVertex, 0);
   gl.enableVertexAttribArray(a_Position);
+
+  // Assign the buffer object to a_UV variable and enable
+  gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, F_SIZE * g_dataPerVertex, 3 * F_SIZE);
+  gl.enableVertexAttribArray(a_UV);
+
+  // Assign the buffer object to a_Color variable and enable
+  gl.vertexAttribPointer(a_Color, 4, gl.FLOAT, false, F_SIZE * g_dataPerVertex, 5 * F_SIZE);
+  gl.enableVertexAttribArray(a_Color);
+
+  // Assign the buffer object to a_Normal variable and enable
+  gl.vertexAttribPointer(a_Normal, 3, gl.FLOAT, false, F_SIZE * g_dataPerVertex, 9 * F_SIZE);
+  gl.enableVertexAttribArray(a_Normal);
 }
 
 function connectVariablesToGLSL() {

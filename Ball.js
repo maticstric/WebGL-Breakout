@@ -1,6 +1,6 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get colliderSubdivision () {return 10;}
+  static get colliderSubdivision () {return 48;}
 
   get velocityX() {return this.velocity.elements[0];}
   get velocityY() {return this.velocity.elements[1];}
@@ -14,6 +14,7 @@ class Ball extends GameObject {
     super();
     this.model = new Sphere();
     this.velocity = new Vector3([0, 0, 0]);
+    this.canHitPaddle = true;
 
     this.translate(0, -8.75, 0); // Inital position
     this.scale(0.35, 0.35, 0.35);
@@ -24,58 +25,67 @@ class Ball extends GameObject {
       // Update position based on velocity if the game has started
       this.translateVect(this.velocity);
 
-      this.checkTileCollisions();
-      this.checkPaddleWallCollisions();
+      this.checkCollisions();
     } else {
       // Otherwise constrain it to the paddle
       this.positionX =  g_paddle.positionX;
     }
   }
 
-  checkTileCollisions() {
-    let pointInsideIndex = null;
+  checkCollisions() {
+    let pointsInside = null;
+    let objects = [];
 
-    for (let i = 0; i < g_tiles.length; i++) {
-      let t = g_tiles[i];
+    objects = objects.concat(g_tiles);
+    objects = objects.concat(g_walls);
+    objects = objects.concat(g_paddle);
 
-      pointInsideIndex = t.arePointsInside(this.collisionPoints); // Check if any points are inside
+    for (let i = 0; i < objects.length; i++) {
+      let object = objects[i];
 
-      if (pointInsideIndex !== null) { // Collision happened
-        this.bounce(pointInsideIndex);
+      // Check if any points are inside
+      pointsInside = object.arePointsInside(this.collisionPoints); 
 
-        g_tiles.splice(i, 1);
+      if (pointsInside.length > 0) { // Collision happened
+        if (object instanceof Paddle && this.canHitPaddle){
+          this.bounce(pointsInside);
+          this.canHitPaddle = false;
+        } else if (!(object instanceof Paddle)) {
+          this.bounce(pointsInside);
+          this.canHitPaddle = true;
+        }
+
+        if (object instanceof Tile) {
+          g_tiles.splice(i, 1);
+        }
       }
     }
   }
 
-  checkPaddleWallCollisions() {
-    let pointInsideIndex = null;
-    let paddleAndWalls = [];
+  bounce(pointsInside) {
+    // reflection formula r = d - 2 * dot(d, n) * n
+    // r is the reflection of d accross n, n must be normalized
 
-    paddleAndWalls = paddleAndWalls.concat(g_walls);
-    paddleAndWalls = paddleAndWalls.concat(g_paddle);
-
-    for (let i = 0; i < paddleAndWalls.length; i++) {
-      let t = paddleAndWalls[i];
-
-      pointInsideIndex = t.arePointsInside(this.collisionPoints); // Check if any points are inside
-
-      if (pointInsideIndex !== null) { // Collision happened
-        this.bounce(pointInsideIndex);
-      }
+    let n = new Vector3([0, 0, 0]);
+    // Find the normal vector in between the all the pointsInside and 
+    for (let point of pointsInside){
+      point.sub(this.position);
+      point.normalize();
+      n.add(point);
     }
-  }
+    n.normalize();
+    // Invert it to serve as the reflection axis
+    n.mul(-1);
 
-  bounce(pointInsideIndex) {
-    let velocityMagnitude = this.velocity.magnitude();
-    let bounce = this.position;
-    bounce.sub(pointInsideIndex);
-    bounce.normalize();
-    bounce.mul(velocityMagnitude);
+    // Set the incident vector
+    let d = new Vector3([0, 0, 0]);
+    d.set(this.velocity);
 
-    this.velocity.add(bounce);
-    this.velocity.normalize();
-    this.velocity.mul(velocityMagnitude);
+    n.mul(Vector3.dot(d, n) * -2); // -2 * dot(d, n) * n
+
+    d.add(n); // d - 2 * dot(d, n) * n
+
+    this.velocity.set(d);
   }
 
   get collisionPoints() {

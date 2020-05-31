@@ -1,48 +1,37 @@
 class Sphere extends Model{
-  static vertices = []; // initalized after class declaration
+  static get DIVISION() {return 10;}
 
-  constructor() {
+  constructor(color) {
     super();
+    this.vertices = initVertices(color);
   }
 
-  render() {
-    let modelMatrix = new Matrix4();
-    modelMatrix.set(this.positionMatrix);
-    modelMatrix.multiply(this.scaleMatrix);
+  initVertices(color) {
+    let vertices = [];
+    let d = Math.PI / Sphere.DIVISION;
 
-    // To avoid rentering the same set of vertices into the vertex buffer
-    if (g_modelInBuffer != SPHERE) {
-      gl.bufferData(gl.ARRAY_BUFFER, Sphere.vertices, gl.STATIC_DRAW);
-      g_modelInBuffer = SPHERE;
-    }    
-   
-    gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
-    gl.drawArrays(gl.TRIANGLES, 0, Sphere.vertices.length / g_dataPerVertex);
-  }
-}
+    for (let t = 0; t < Math.PI; t += d) {
+      for (let r = 0; r < 2 * Math.PI; r += d) {
+        let p1 = [Math.sin(t) * Math.cos(r), Math.sin(t) * Math.sin(r), Math.cos(t)];
+        let p2 = [Math.sin(t + d) * Math.cos(r), Math.sin(t + d) * Math.sin(r), Math.cos(t + d)];
+        let p3 = [Math.sin(t) * Math.cos(r + d), Math.sin(t) * Math.sin(r + d), Math.cos(t)];
+        let p4 = [Math.sin(t + d) * Math.cos(r + d), Math.sin(t + d) * Math.sin(r + d), Math.cos(t + d)];
 
-initVertices();
+        let uv1 = [t/Math.PI, r/(2*Math.PI)];
+        let uv2 = [(t+d)/Math.PI, r/(2*Math.PI)];
+        let uv3 = [t/Math.PI, (r+d)/(2*Math.PI)];
+        let uv4 = [(t+d)/Math.PI, (r+d)/(2*Math.PI)];
 
-function initVertices() {
-  let d = Math.PI / 10;
+        vertices = vertices.concat(p1, uv1, color, p1);
+        vertices = vertices.concat(p2, uv2, color, p2);
+        vertices = vertices.concat(p4, uv4, color, p4);
 
-  for (let t = 0; t < Math.PI; t += d) {
-    for (let r = 0; r < 2 * Math.PI; r += d) {
-      let p1 = [Math.sin(t) * Math.cos(r), Math.sin(t) * Math.sin(r), Math.cos(t)];
-
-      let p2 = [Math.sin(t + d) * Math.cos(r), Math.sin(t + d) * Math.sin(r), Math.cos(t + d)];
-      let p3 = [Math.sin(t) * Math.cos(r + d), Math.sin(t) * Math.sin(r + d), Math.cos(t)];
-      let p4 = [Math.sin(t + d) * Math.cos(r + d), Math.sin(t + d) * Math.sin(r + d), Math.cos(t + d)];
-
-      Sphere.vertices = Sphere.vertices.concat(p1);
-      Sphere.vertices = Sphere.vertices.concat(p2);
-      Sphere.vertices = Sphere.vertices.concat(p4);
-
-      Sphere.vertices = Sphere.vertices.concat(p1);
-      Sphere.vertices = Sphere.vertices.concat(p4);
-      Sphere.vertices = Sphere.vertices.concat(p3);
+        vertices = vertices.concat(p1, uv1, color, p1);
+        vertices = vertices.concat(p4, uv4, color, p4);
+        vertices = vertices.concat(p3, uv3, color, p3);
+      }
     }
-  }
 
-  Sphere.vertices = new Float32Array(Sphere.vertices);
+    return new Float32Array(vertices);
+  }
 }
