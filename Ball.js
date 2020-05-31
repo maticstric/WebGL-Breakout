@@ -14,6 +14,7 @@ class Ball extends GameObject {
     super();
     this.model = new Sphere();
     this.velocity = new Vector3([0, 0, 0]);
+    this.canHitPaddle = true;
 
     this.translate(0, -8.75, 0); // Inital position
     this.scale(0.35, 0.35, 0.35);
@@ -24,44 +25,32 @@ class Ball extends GameObject {
       // Update position based on velocity if the game has started
       this.translateVect(this.velocity);
 
-      this.checkTileCollisions();
-      this.checkPaddleWallCollisions();
+      this.checkCollisions();
     } else {
       // Otherwise constrain it to the paddle
       this.positionX =  g_paddle.positionX;
     }
   }
 
-  checkTileCollisions() {
+  checkCollisions() {
     let pointsInside = null;
+    let objects = [];
 
-    for (let i = 0; i < g_tiles.length; i++) {
-      let t = g_tiles[i];
+    objects = objects.concat(g_tiles);
+    objects = objects.concat(g_walls);
+    objects = objects.concat(g_paddle);
+
+    for (let i = 0; i < objects.length; i++) {
+      let t = objects[i];
 
       pointsInside = t.arePointsInside(this.collisionPoints); // Check if any points are inside
 
       if (pointsInside.length > 0) { // Collision happened
         this.bounce(pointsInside);
 
-        g_tiles.splice(i, 1);
-      }
-    }
-  }
-
-  checkPaddleWallCollisions() {
-    let pointsInside = null;
-    let paddleAndWalls = [];
-
-    paddleAndWalls = paddleAndWalls.concat(g_walls);
-    paddleAndWalls = paddleAndWalls.concat(g_paddle);
-
-    for (let i = 0; i < paddleAndWalls.length; i++) {
-      let t = paddleAndWalls[i];
-
-      pointsInside = t.arePointsInside(this.collisionPoints); // Check if any points are inside
-
-      if (pointsInside.length > 0) { // Collision happened
-        this.bounce(pointsInside);
+        if (t instanceof Tile) {
+          g_tiles.splice(i, 1);
+        }
       }
     }
   }
