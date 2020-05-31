@@ -1,26 +1,77 @@
 // Vertex shader
-var VSHADER_SOURCE =
-  `
-  attribute vec3 a_Position;
+var VSHADER_SOURCE =`
+  precision mediump float;
 
+  attribute vec3 a_Position;
+  attribute vec2 a_UV;
+  attribute vec4 a_Color;
+  attribute vec3 a_Normal;
+
+  varying vec3 v_Position;
+  varying vec2 v_UV;
+  varying vec4 v_Color;
+  varying vec3 v_Normal;
+
+  uniform mat4 u_NormalMatrix;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_ProjectionMatrix; 
   uniform mat4 u_ViewMatrix;
 
   void main() {
+    v_UV = a_UV;
+    v_Color = a_Color;
+    v_Normal = vec3(u_NormalMatrix * vec4(a_Normal, 1.0));
+    v_Position = vec3(u_ModelMatrix * vec4(a_Position, 1.0));
+
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * vec4(a_Position, 1.0);
-  }
-  `;
+  }`;
 
 // Fragment shader
-var FSHADER_SOURCE =
-  `
+var FSHADER_SOURCE = `
   precision mediump float;
 
+  varying vec3 v_Position;
+  varying vec2 v_UV;
+  varying vec4 v_Color;
+  varying vec3 v_Normal;
+
+  uniform float u_TextureWeight;
+  uniform int u_TextureNum;
+  // Copy pasted, remove any not needed
+  uniform sampler2D u_Sampler0;
+  uniform sampler2D u_Sampler1;
+  uniform sampler2D u_Sampler2;
+  uniform sampler2D u_Sampler3;
+  uniform sampler2D u_Sampler4;
+
   void main() {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Hardcoded as red
-  }
-  `;
+    // Calculate combined texture and base color
+    float t = u_TextureWeight;
+    vec4 texColor;
+    vec4 vertexColor = v_Color;
+    vec4 baseColor;
+
+    if (u_TextureNum == 0) {
+      texColor = texture2D(u_Sampler0, v_UV); // use texture0
+      baseColor = (1.0 - t) * vertexColor + t * texColor;
+    } else if (u_TextureNum == 1) {
+      texColor = texture2D(u_Sampler1, v_UV); // use texture1
+      baseColor = (1.0 - t) * vertexColor + t * texColor;
+    } else if (u_TextureNum == 2) {
+      texColor = texture2D(u_Sampler2, v_UV); // use texture2
+      baseColor = (1.0 - t) * vertexColor + t * texColor;
+    } else if (u_TextureNum == 3) {
+      texColor = texture2D(u_Sampler3, v_UV); // use texture3
+      baseColor = (1.0 - t) * vertexColor + t * texColor;
+    } else if (u_TextureNum == 4) {
+      texColor = texture2D(u_Sampler4, v_UV); // use texture4
+      baseColor = (1.0 - t) * vertexColor + t * texColor;
+    } else {
+      baseColor = vertexColor;
+    }
+
+    gl_FragColor = baseColor;
+  }`;
 
 const SLIDER_LENGTH = 100;
 const MAX_SENSITIVITY = 0.1;
@@ -44,6 +95,12 @@ let g_tiles;
 let g_walls;
 
 let a_Position;
+let a_UV;
+let a_Color;
+let a_Normal;
+let u_NormalMatrix;
+let u_TextureWeight;
+let u_TextureNum;
 let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
@@ -213,28 +270,70 @@ function connectVariablesToGLSL() {
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0) {
     console.log('Failed to get the storage location of a_Position');
-    return;
+    //return;
+  }
+
+  // Get the storage location of a_UV
+  a_UV = gl.getAttribLocation(gl.program, 'a_UV');
+  if (a_UV < 0) {
+    console.log('Failed to get the storage location of a_UV');
+    //return;
+  }
+
+  // Get the storage location of a_Color
+  a_Color = gl.getAttribLocation(gl.program, 'a_Color');
+  if (a_Color < 0) {
+    console.log('Failed to get the storage location of a_Color');
+    //return;
+  }
+
+  // Get the storage location of a_Normal
+  a_Normal = gl.getAttribLocation(gl.program, 'a_Normal');
+  if (a_Normal < 0) {
+    console.log('Failed to get the storage location of a_Normal');
+    //return;
+  }
+
+  // Get the storage location of u_TextureWeight
+  u_TextureWeight = gl.getUniformLocation(gl.program, 'u_TextureWeight');
+  if (!u_TextureWeight) {
+    console.log('Failed to get the storage location of u_TextureWeight');
+    //return;
+  }
+
+  // Get the storage location of u_TextureNum
+  u_TextureNum = gl.getUniformLocation(gl.program, 'u_TextureNum');
+  if (!u_TextureNum) {
+    console.log('Failed to get the storage location of u_TextureNum');
+    //return;
+  }
+
+  // Get the storage location of u_NormalMatrix
+  u_NormalMatrix = gl.getUniformLocation(gl.program, 'u_NormalMatrix');
+  if (!u_NormalMatrix) {
+    console.log('Failed to get the storage location of u_NormalMatrix');
+    //return;
   }
 
   // Get the storage location of u_ModelMatrix
   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
   if (!u_ModelMatrix) {
     console.log('Failed to get the storage location of u_ModelMatrix');
-    return;
+    //return;
   }
 
   // Get the storage location of u_ProjectionMatrix
   u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
   if (!u_ProjectionMatrix) {
     console.log('Failed to get the storage location of u_ProjectionMatrix');
-    return;
+    //return;
   }
 
   // Get the storage location of u_ViewMatrix
   u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if (!u_ViewMatrix) {
     console.log('Failed to get the storage location of u_ViewMatrix');
-    return;
+    //return;
   }
 }
 
