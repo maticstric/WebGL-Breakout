@@ -5,7 +5,7 @@ class Model {
     this.scaleMatrix = new Matrix4();
     this.vertices = [];
     this.textureNum = -1;
-    this.texWeight = 1;
+    this.textureWeight = 1;
   }
 
   render() {
@@ -24,8 +24,8 @@ class Model {
     // Set all uniforms
     gl.uniformMatrix4fv(u_NormalMatrix, false, normalMatrix.elements);
     gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
-    gl.uniform1f(u_texColorWeight, this.texWeight);
-    gl.uniform1i(u_whichTexture, this.textureNum);
+    gl.uniform1f(u_TextureWeight, this.textureWeight);
+    gl.uniform1i(u_TextureNum, this.textureNum);
 
     gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / g_dataPerVertex);
   }

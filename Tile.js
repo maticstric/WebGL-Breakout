@@ -5,6 +5,6 @@ class Tile extends GameObject{
   constructor() {
     super();
 
-    this.model = new Cube();
+    this.model = new Cube([1, 1, 0, 1]);
   }
 }
