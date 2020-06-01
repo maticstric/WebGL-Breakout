@@ -2,21 +2,12 @@ class Ball extends GameObject {
   // Division of the collider as an angle
   static get colliderSubdivision () {return 16;}
 
-  get velocityX() {return this.velocity.elements[0];}
-  get velocityY() {return this.velocity.elements[1];}
-  get velocityZ() {return this.velocity.elements[2];}
-
-  set velocityX(n) {this.velocity.elements[0] = n;}
-  set velocityY(n) {this.velocity.elements[1] = n;}
-  set velocityZ(n) {this.velocity.elements[2] = n;}
-
   constructor() {
     super();
     this.model = new Sphere([0, 0, 1, 1]);
     this.velocity = new Vector3([0, 0, 0]);
     this.canHitPaddle = true;
 
-    this.translate(0, -8.75, 0); // Inital position
     this.scale(0.35, 0.35, 0.35);
   }
 
@@ -26,9 +17,14 @@ class Ball extends GameObject {
       this.translateVect(this.velocity);
 
       this.checkCollisions();
+
+      if (this.positionY < g_paddle.positionY) {
+        endGame();
+      }
     } else {
       // Otherwise constrain it to the paddle
-      this.positionX =  g_paddle.positionX;
+      this.positionX = g_paddle.positionX;
+      this.positionY = g_paddle.positionY + g_paddle.height;
     }
   }
 
@@ -65,7 +61,6 @@ class Ball extends GameObject {
   }
 
   paddleBounce() {
-    // TODO make so cant bounce bellow y axis
     // Percentage away from center
     let collisionPoint = (this.positionX - g_paddle.positionX) / (g_paddle.width / 2);
 
