@@ -279,7 +279,9 @@ function setupControls() {
   // Add listener to start game
   document.addEventListener('keydown', (event) => {
     if (event.key === ' ') {
-      startGame();
+      if (!g_gameStarted) {
+        startGame();
+      }
     }
   });
 }
