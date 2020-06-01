@@ -10,7 +10,7 @@ class Paddle extends GameObject{
     super();
     this.model = new Cube([1, 1, 0, 1]);
 
-    this.translate(0, -9.5, 0);
+    this.translate(-6.6, -9.5, 0);
     this.scale(this.constructor.length, 0.3, 0.3);
   }
 
