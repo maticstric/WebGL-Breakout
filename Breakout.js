@@ -174,7 +174,7 @@ function renderAllShapes() {
 
 function startGame() {
   g_gameStarted = true;
-  g_ball.velocity = new Vector3([0.05, 0.05, 0]);
+  g_ball.velocity = new Vector3([0.08, 0.08, 0]);
 }
 
 function mouseMove(e) {

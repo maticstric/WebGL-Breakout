@@ -82,6 +82,38 @@ class Ball extends GameObject {
     d.set(this.velocity);
 
     n.mul(Vector3.dot(d, n) * -2); // -2 * dot(d, n) * n
+  }
+
+  paddleBounce() {
+    // Percentage away from center
+    let collisionPoint = (this.positionX - g_paddle.positionX) / (g_paddle.width / 2);
+
+    // Makes 45 deg the largest angle (assuming no bounces from edges of paddle)
+    let angle = collisionPoint * Math.PI / 4; 
+
+    this.velocity = new Vector3([Math.sin(angle), Math.cos(angle), 0]).mul(this.velocity.magnitude()); 
+  }
+
+  bounce(pointsInside) {
+    // reflection formula r = d - 2 * dot(d, n) * n
+    // r is the reflection of d accross n, n must be normalized
+
+    let n = new Vector3([0, 0, 0]);
+    // Find the normal vector in between the all the pointsInside and 
+    for (let point of pointsInside){
+      point.sub(this.position);
+      point.normalize();
+      n.add(point);
+    }
+    n.normalize();
+    // Invert it to serve as the reflection axis
+    n.mul(-1);
+
+    // Set the incident vector
+    let d = new Vector3([0, 0, 0]);
+    d.set(this.velocity);
+
+    n.mul(Vector3.dot(d, n) * -2); // -2 * dot(d, n) * n
 
     d.add(n); // d - 2 * dot(d, n) * n
 
