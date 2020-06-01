@@ -1,11 +1,10 @@
-const EDGE_X = 9;
-const EDGE_Y = 10.4; 
-// Thickness from the middle of the wall
-const WALL_THICKNESS = 0.5;
-
 class TileGrid {
-  static get eastEdge(){return EDGE_X - WALL_THICKNESS;}
-  static get westEdge(){return -EDGE_X + WALL_THICKNESS;}
+  static get EDGE_X() {return 9;}
+  static get EDGE_Y() {return 10.54;}
+  static get WALL_THICKNESS() {return 0.5;}
+
+  static get eastEdge(){return TileGrid.EDGE_X - TileGrid.WALL_THICKNESS;}
+  static get westEdge(){return -TileGrid.EDGE_X + TileGrid.WALL_THICKNESS;}
 
   static generateGrid(rows, cols, margin) {
     let tiles = [];
@@ -38,13 +37,13 @@ class TileGrid {
 
     // We'll probably adjust all these numbers later
     
-    west.scale(WALL_THICKNESS, 10, WALL_THICKNESS);
-    north.scale(9, WALL_THICKNESS, WALL_THICKNESS);
-    east.scale(WALL_THICKNESS, 10, WALL_THICKNESS);
+    west.scale(TileGrid.WALL_THICKNESS, TileGrid.EDGE_Y, TileGrid.WALL_THICKNESS);
+    north.scale(TileGrid.EDGE_X, TileGrid.WALL_THICKNESS, TileGrid.WALL_THICKNESS);
+    east.scale(TileGrid.WALL_THICKNESS, TileGrid.EDGE_Y, TileGrid.WALL_THICKNESS);
 
-    west.translate(-EDGE_X, 0, 0);
-    north.translate(0, EDGE_Y, 0);
-    east.translate(EDGE_X, 0, 0);
+    west.translate(-TileGrid.EDGE_X, 0, 0);
+    north.translate(0, TileGrid.EDGE_Y, 0);
+    east.translate(TileGrid.EDGE_X, 0, 0);
 
     return [west, north, east];
   }
