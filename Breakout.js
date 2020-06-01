@@ -41,8 +41,6 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler0;
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
-  uniform sampler2D u_Sampler3;
-  uniform sampler2D u_Sampler4;
 
   void main() {
     // Calculate combined texture and base color
@@ -59,12 +57,6 @@ var FSHADER_SOURCE = `
       baseColor = (1.0 - t) * vertexColor + t * texColor;
     } else if (u_TextureNum == 2) {
       texColor = texture2D(u_Sampler2, v_UV); // use texture2
-      baseColor = (1.0 - t) * vertexColor + t * texColor;
-    } else if (u_TextureNum == 3) {
-      texColor = texture2D(u_Sampler3, v_UV); // use texture3
-      baseColor = (1.0 - t) * vertexColor + t * texColor;
-    } else if (u_TextureNum == 4) {
-      texColor = texture2D(u_Sampler4, v_UV); // use texture4
       baseColor = (1.0 - t) * vertexColor + t * texColor;
     } else {
       baseColor = vertexColor;
@@ -108,12 +100,17 @@ let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
 
+let u_Sampler0;
+let u_Sampler1;
+let u_Sampler2;
+
 function main() {
   // WebGL and GLSL setup
   setupWebGL();
-  initalizeShaders();
+  initializeShaders();
   connectVariablesToGLSL();
   setupBuffer();
+  initializeTextures();
 
   setupHTMLElements();
   setupControls();
@@ -259,6 +256,82 @@ function setupHTMLElements() {
   g_livesText.innerHTML = "Lives: " + NUM_LIVES;
 }
 
+function sendImageToGLSL(n, image) {
+  var texture = gl.createTexture(); // Create a texture object
+
+  if (!texture) {
+      console.log('Failed to create the texture object');
+      return false;
+  }
+
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // flip the image's y axis
+
+  // Enable the tecture unit
+  switch(n){
+      case 0:
+          gl.activeTexture(gl.TEXTURE0);
+          break;
+      case 1:
+          gl.activeTexture(gl.TEXTURE1);
+          break;
+      case 2:
+          gl.activeTexture(gl.TEXTURE2);
+          break;
+  }
+
+  // Bind the texture object to the target
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  // Set the texture parameters
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  // Set the tecture image
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
+  // Set the texture until 0 to the sampler
+  switch(n){
+      case 0:
+          gl.uniform1i(u_Sampler0, 0);
+          break;
+      case 1:
+          gl.uniform1i(u_Sampler1, 1);
+          break;
+      case 2:
+          gl.uniform1i(u_Sampler2, 2);
+          break;
+  }
+}
+
+function initializeTextures() {
+  var image0 = new Image(); // Create the Image object
+  if (!image0) {
+      console.log('Failed to create the image object');
+      return false;
+  }
+
+  var image1 = new Image();
+  if (!image1) {
+      console.log('Failed to create the image object');
+      return false;
+  }
+
+  var image2 = new Image();
+  if (!image2) {
+      console.log('Failed to create the image object');
+      return false;
+  }
+
+  // Register the event handler to be called on loading an image
+  image0.onload = function(){ sendImageToGLSL(0, image0); };
+  image1.onload = function(){ sendImageToGLSL(1, image1); };
+  image2.onload = function(){ sendImageToGLSL(2, image2); };
+
+  // Tell the browser to load the image
+  image0.src = 'textures/paddle.png';
+  image1.src = 'textures/tile.png';
+  image2.src = 'textures/sky.png';
+  
+  return true;
+}
+
 function setupBuffer() {
   // Create a buffer object
   let vertexBuffer = gl.createBuffer();
@@ -359,9 +432,30 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_ViewMatrix');
     //return;
   }
+
+  // Get the storage location of u_Sampler
+  u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
+
+  if(!u_Sampler0) {
+      console.log('Failed to get the storage location of u_Sampler0');
+  }
+
+  // Get the storage location of u_Sampler
+  u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1');
+
+  if(!u_Sampler1) {
+      console.log('Failed to get the storage location of u_Sampler1');
+  }
+
+  // Get the storage location of u_Sampler
+  u_Sampler2 = gl.getUniformLocation(gl.program, 'u_Sampler2');
+
+  if(!u_Sampler2) {
+      console.log('Failed to get the storage location of u_Sampler2');
+  }
 }
 
-function initalizeShaders() {
+function initializeShaders() {
   // Initialize shaders
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
     console.log('Failed to intialize shaders.');

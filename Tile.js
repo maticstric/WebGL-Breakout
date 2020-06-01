@@ -5,6 +5,8 @@ class Tile extends GameObject{
   constructor() {
     super();
 
-    this.model = new Cube([1, 1, 0, 1]);
+    // Fully opaque initially
+    this.model = new Cube([0, 0, 0, 1]);
+    this.model.textureNum = 1;
   }
 }
