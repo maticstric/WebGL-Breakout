@@ -1,6 +1,6 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get colliderSubdivision () {return 48;}
+  static get colliderSubdivision () {return 16;}
 
   get velocityX() {return this.velocity.elements[0];}
   get velocityY() {return this.velocity.elements[1];}
@@ -52,18 +52,20 @@ class Ball extends GameObject {
           this.canHitPaddle = false;
         } else if (!(object instanceof Paddle)) {
           this.bounce(pointsInside);
-          this.canHitPaddle = true;
         }
 
         if (object instanceof Tile) {
           g_tiles.splice(i, 1);
           objects.splice(i, 1);
         }
+      } else if (object instanceof Paddle){
+        this.canHitPaddle = true;
       }
     }
   }
 
   paddleBounce() {
+    // TODO make so cant bounce bellow y axis
     // Percentage away from center
     let collisionPoint = (this.positionX - g_paddle.positionX) / (g_paddle.width / 2);
 
