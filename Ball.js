@@ -56,6 +56,8 @@ class Ball extends GameObject {
           g_tiles.splice(i, 1);
           objects.splice(i, 1);
 
+          checkHasWon();
+
           let newSpeed = Ball.maxSpeed - (Ball.maxSpeed - Ball.minSpeed) * (g_tiles.length / g_tilesOriginalLength);
 
           this.velocity.normalize();

@@ -197,6 +197,15 @@ function renderAllShapes() {
   g_ball.model.render(); 
 }
 
+function checkHasWon() {
+  if (g_tiles.length == 0) {
+    g_gameStarted = false;
+    g_lives = NUM_LIVES;
+    g_livesText.innerHTML = "You Win! 😊";
+    g_tiles = TileGrid.generateGrid(7, 7, 0.3);
+  }
+}
+
 function startGame() {
   g_gameStarted = true;
 
@@ -228,7 +237,7 @@ function endGame(){
     g_ball.velocity = new Vector3([0, 0, 0]);
     g_tiles = TileGrid.generateGrid(7, 7, 0.3);
     g_lives = NUM_LIVES;
-    g_livesText.innerHTML = "Game Over";
+    g_livesText.innerHTML = "Game Over 😒";
   }
 }
 
