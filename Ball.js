@@ -12,7 +12,7 @@ class Ball extends GameObject {
 
   constructor() {
     super();
-    this.model = new Sphere([1, 1, 0, 1]);
+    this.model = new Sphere([0, 0, 1, 1]);
     this.velocity = new Vector3([0, 0, 0]);
     this.canHitPaddle = true;
 
@@ -48,7 +48,7 @@ class Ball extends GameObject {
 
       if (pointsInside.length > 0) { // Collision happened
         if (object instanceof Paddle && this.canHitPaddle){
-          this.bounce(pointsInside);
+          this.paddleBounce();
           this.canHitPaddle = false;
         } else if (!(object instanceof Paddle)) {
           this.bounce(pointsInside);
@@ -57,31 +57,10 @@ class Ball extends GameObject {
 
         if (object instanceof Tile) {
           g_tiles.splice(i, 1);
+          objects.splice(i, 1);
         }
       }
     }
-  }
-
-  bounce(pointsInside) {
-    // reflection formula r = d - 2 * dot(d, n) * n
-    // r is the reflection of d accross n, n must be normalized
-
-    let n = new Vector3([0, 0, 0]);
-    // Find the normal vector in between the all the pointsInside and 
-    for (let point of pointsInside){
-      point.sub(this.position);
-      point.normalize();
-      n.add(point);
-    }
-    n.normalize();
-    // Invert it to serve as the reflection axis
-    n.mul(-1);
-
-    // Set the incident vector
-    let d = new Vector3([0, 0, 0]);
-    d.set(this.velocity);
-
-    n.mul(Vector3.dot(d, n) * -2); // -2 * dot(d, n) * n
   }
 
   paddleBounce() {
@@ -123,6 +102,7 @@ class Ball extends GameObject {
   get collisionPoints() {
     let radius = this.width / 2; 
     let increment = 360 / Ball.colliderSubdivision;
+
     let points = [];
 
     // Points defined counterclockwise starting at east
