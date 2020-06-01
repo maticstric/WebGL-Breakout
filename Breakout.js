@@ -75,12 +75,14 @@ var FSHADER_SOURCE = `
 
 const SLIDER_LENGTH = 100;
 const MAX_SENSITIVITY = 0.1;
+const NUM_LIVES = 3;
 
 const CUBE = 0; // ints used for identifying the current model in the vertex buffer
 const SPHERE = 1;
 
 let g_mouseSensitivity = MAX_SENSITIVITY / 2;
 let g_gameStarted = false;
+let g_lives = NUM_LIVES;
 
 let canvas;
 let gl;
@@ -174,7 +176,18 @@ function renderAllShapes() {
 
 function startGame() {
   g_gameStarted = true;
+  // TODO set vector to be random or based on mouse movement
   g_ball.velocity = new Vector3([0.08, 0.08, 0]);
+}
+
+function endGame(){
+  g_lives --;
+  g_gameStarted = false;
+
+  if (g_lives == 0) {
+    g_tiles = TileGrid.generateGrid(7, 7, 0.3);
+    g_lives = NUM_LIVES;
+  }
 }
 
 function mouseMove(e) {
