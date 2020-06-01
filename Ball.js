@@ -1,6 +1,8 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
   static get colliderSubdivision () {return 8;}
+  static get minSpeed () {return 0.1;}
+  static get maxSpeed () {return 0.25;}
 
   constructor() {
     super();
@@ -53,6 +55,11 @@ class Ball extends GameObject {
         if (object instanceof Tile) {
           g_tiles.splice(i, 1);
           objects.splice(i, 1);
+
+          let newSpeed = Ball.maxSpeed - (Ball.maxSpeed - Ball.minSpeed) * (g_tiles.length / g_tilesOriginalLength);
+
+          this.velocity.normalize();
+          this.velocity.mul(newSpeed);
         }
       } else if (object instanceof Paddle){
         this.canHitPaddle = true;

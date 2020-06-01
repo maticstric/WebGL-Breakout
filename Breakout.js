@@ -104,6 +104,7 @@ let g_ball = new Ball();
 let g_paddle = new Paddle();
 
 let g_tiles;
+let g_tilesOriginalLength;
 let g_walls;
 
 let a_Position;
@@ -135,6 +136,8 @@ function main() {
   setupControls();
 
   g_tiles = TileGrid.generateGrid(7, 7, 0.3);
+  g_tilesOriginalLength = g_tiles.length;
+
   g_walls = TileGrid.generateWalls();
 
   // Specify the color for clearing <canvas>
@@ -201,8 +204,19 @@ function startGame() {
     g_livesText.innerHTML = "Lives: " + g_lives;
   }
 
-  // TODO set vector to be random or based on mouse movement
-  g_ball.velocity = new Vector3([0.08, 0.08, 0]);
+  let randomX = Math.random() * 2 - 1; // between -1 and 1
+  let randomY = Math.random() * (1 - Math.sqrt(2) / 2) + Math.sqrt(2) / 2; // between 0 and sqrt(2) / 2
+
+  let velocity = new Vector3([randomX, randomY, 0]);
+  velocity.normalize();
+
+  if (g_ball.velocity.magnitude() === 0){
+    velocity.mul(Ball.minSpeed);
+  } else {
+    velocity.mul(g_ball.velocity.magnitude());
+  }
+
+  g_ball.velocity = velocity;
 }
 
 function endGame(){
@@ -211,6 +225,7 @@ function endGame(){
   g_livesText.innerHTML = "Lives: " + g_lives;
 
   if (g_lives == 0) {
+    g_ball.velocity = new Vector3([0, 0, 0]);
     g_tiles = TileGrid.generateGrid(7, 7, 0.3);
     g_lives = NUM_LIVES;
     g_livesText.innerHTML = "Game Over";
