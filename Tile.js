@@ -8,5 +8,7 @@ class Tile extends GameObject{
     // Fully opaque initially
     this.model = new Cube([0, 0, 0, 1]);
     this.model.textureNum = 1;
+
+    this.scale(1, 0.3, 0.3);
   }
 }

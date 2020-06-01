@@ -327,7 +327,7 @@ function initializeTextures() {
   // Tell the browser to load the image
   image0.src = 'textures/paddle.png';
   image1.src = 'textures/tile.png';
-  image2.src = 'textures/sky.png';
+  image2.src = 'textures/wall.png';
   
   return true;
 }

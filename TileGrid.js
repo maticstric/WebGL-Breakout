@@ -12,7 +12,6 @@ class TileGrid {
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         let t = new Tile();
-        t.scale(Tile.length, 0.3, 0.3);
 
         let width = t.width;
         let height = t.height;
@@ -31,9 +30,9 @@ class TileGrid {
   }
 
   static generateWalls() {
-    let west = new Tile(); 
-    let north = new Tile(); 
-    let east = new Tile(); 
+    let west = new Wall(); 
+    let north = new Wall(); 
+    let east = new Wall(); 
 
     // We'll probably adjust all these numbers later
     
