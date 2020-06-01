@@ -83,6 +83,7 @@ const SPHERE = 1;
 let g_mouseSensitivity = MAX_SENSITIVITY / 2;
 let g_gameStarted = false;
 let g_lives = NUM_LIVES;
+let g_livesText;
 
 let canvas;
 let gl;
@@ -176,6 +177,11 @@ function renderAllShapes() {
 
 function startGame() {
   g_gameStarted = true;
+
+  if (g_lives == NUM_LIVES) {
+    g_livesText.innerHTML = "Lives: " + g_lives;
+  }
+
   // TODO set vector to be random or based on mouse movement
   g_ball.velocity = new Vector3([0.08, 0.08, 0]);
 }
@@ -183,10 +189,12 @@ function startGame() {
 function endGame(){
   g_lives --;
   g_gameStarted = false;
+  g_livesText.innerHTML = "Lives: " + g_lives;
 
   if (g_lives == 0) {
     g_tiles = TileGrid.generateGrid(7, 7, 0.3);
     g_lives = NUM_LIVES;
+    g_livesText.innerHTML = "Game Over";
   }
 }
 
@@ -246,6 +254,9 @@ function setupHTMLElements() {
     document.getElementById("sensitivity").oninput = function() {
       g_mouseSensitivity = this.value / SLIDER_LENGTH * MAX_SENSITIVITY;
     };
+
+    g_livesText = document.getElementById("lives");
+  g_livesText.innerHTML = "Lives: " + NUM_LIVES;
 }
 
 function setupBuffer() {

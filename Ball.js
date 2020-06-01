@@ -1,6 +1,6 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get colliderSubdivision () {return 16;}
+  static get colliderSubdivision () {return 8;}
 
   constructor() {
     super();
