@@ -41,6 +41,8 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler0;
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
+  uniform vec3 u_LightPosition;
+  uniform vec3 u_CameraPosition;
 
   void main() {
     // Calculate combined texture and base color
@@ -63,6 +65,21 @@ var FSHADER_SOURCE = `
     }
 
     gl_FragColor = baseColor;
+
+    // Lighting
+    vec3 normal = normalize(v_Normal);
+    vec3 lightDirection = normalize(u_LightPosition - v_Position);
+    vec3 reflect = reflect(-lightDirection, normal);
+    vec3 cameraDirection = normalize(u_CameraPosition - v_Position);
+
+    float nDotL = max(dot(normal, lightDirection), 0.0);
+    float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
+
+    vec4 diffuse = vec4(vec3(gl_FragColor) * nDotL * 0.8, 1.0);
+    vec4 ambient = vec4(vec3(gl_FragColor) * 0.6, 1.0);
+    vec4 specular = vec4(vec3(gl_FragColor) * eDotR * 0.7, 1.0);
+
+    gl_FragColor = diffuse + ambient + specular;
   }`;
 
 const SLIDER_LENGTH = 100;
@@ -99,6 +116,8 @@ let u_TextureNum;
 let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
+let u_LightPosition;
+let u_CameraPosition;
 
 let u_Sampler0;
 let u_Sampler1;
@@ -148,6 +167,9 @@ function renderAllShapes() {
   );
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
 
+  /* FOR LIGHTING */
+  gl.uniform3f(u_LightPosition, g_ball.positionX, g_ball.positionY, g_ball.positionZ);
+  gl.uniform3f(u_CameraPosition, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
 
   /* CUBES */
 
@@ -452,6 +474,20 @@ function connectVariablesToGLSL() {
 
   if(!u_Sampler2) {
       console.log('Failed to get the storage location of u_Sampler2');
+  }
+
+  // Get the storage location of u_LightPosition
+  u_LightPosition = gl.getUniformLocation(gl.program, 'u_LightPosition');
+
+  if (!u_LightPosition) {
+    console.log('Failed to get the storage location of u_LightPosition');
+  }
+
+  // Get the storage location of u_CameraPosition
+  u_CameraPosition = gl.getUniformLocation(gl.program, 'u_CameraPosition');
+
+  if (!u_CameraPosition) {
+    console.log('Failed to get the storage location of u_CameraPosition');
   }
 }
 
