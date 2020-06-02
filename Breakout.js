@@ -42,6 +42,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
   uniform sampler2D u_Sampler3;
+  uniform bool u_LightingOn;
   uniform vec3 u_LightPosition;
   uniform vec3 u_CameraPosition;
 
@@ -68,20 +69,24 @@ var FSHADER_SOURCE = `
       baseColor = vertexColor;
     }
 
-    // Lighting
-    vec3 normal = normalize(v_Normal);
-    vec3 lightDirection = normalize(u_LightPosition - v_Position);
-    vec3 reflect = reflect(-lightDirection, normal);
-    vec3 cameraDirection = normalize(u_CameraPosition - v_Position);
+    if (u_LightingOn) {
+      // Lighting
+      vec3 normal = normalize(v_Normal);
+      vec3 lightDirection = normalize(u_LightPosition - v_Position);
+      vec3 reflect = reflect(-lightDirection, normal);
+      vec3 cameraDirection = normalize(u_CameraPosition - v_Position);
 
-    float nDotL = max(dot(normal, lightDirection), 0.0);
-    float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
+      float nDotL = max(dot(normal, lightDirection), 0.0);
+      float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
 
-    vec3 ambient = baseColor.rgb * 0.8;
-    vec3 diffuse = baseColor.rgb * nDotL * 0.6;
-    vec3 specular = baseColor.rgb * eDotR * 0.8;
+      vec3 ambient = baseColor.rgb * 0.8;
+      vec3 diffuse = baseColor.rgb * nDotL * 0.6;
+      vec3 specular = baseColor.rgb * eDotR * 0.8;
 
-    gl_FragColor = vec4(ambient + diffuse + specular, baseColor.a);
+      gl_FragColor = vec4(ambient + diffuse + specular, baseColor.a);
+    } else {
+      gl_FragColor = baseColor;
+    }
   }`;
 
 const SLIDER_LENGTH = 100;
@@ -121,6 +126,7 @@ let u_TextureNum;
 let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
+let u_LightingOn;
 let u_LightPosition;
 let u_CameraPosition;
 
@@ -468,6 +474,12 @@ function connectVariablesToGLSL() {
   if (a_Normal < 0) {
     console.log('Failed to get the storage location of a_Normal');
     //return;
+  }
+
+  // Get the storage location of u_LightingOn
+  u_LightingOn = gl.getUniformLocation(gl.program, 'u_LightingOn');
+  if (!u_LightingOn) {
+      console.log('Failed to get the storage location of u_LightingOn');
   }
 
   // Get the storage location of u_TextureWeight

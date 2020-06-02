@@ -6,6 +6,7 @@ class Model {
     this.vertices = [];
     this.textureNum = -1;
     this.textureWeight = 1;
+    this.hasLighting = 1;
   }
 
   render() {
@@ -26,6 +27,7 @@ class Model {
     gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
     gl.uniform1f(u_TextureWeight, this.textureWeight);
     gl.uniform1i(u_TextureNum, this.textureNum);
+    gl.uniform1i(u_LightingOn, this.hasLighting);
 
     gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / g_dataPerVertex);
   }
