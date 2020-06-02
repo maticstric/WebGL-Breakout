@@ -29,7 +29,7 @@ class Ball extends GameObject {
     } else {
       // Otherwise constrain it to the paddle
       this.positionX = g_paddle.positionX;
-      this.positionY = g_paddle.positionY + g_paddle.height;
+      this.positionY = g_paddle.positionY + g_paddle.height / 2 + this.width / 2;
     }
   }
 
