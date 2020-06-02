@@ -22,7 +22,7 @@ class Ball extends GameObject {
 
       this.checkCollisions();
 
-      if (this.positionY < g_paddle.positionY) {
+      if (this.positionY < g_paddle.positionY + g_paddle.height / 2) {
         endGame();
       }
     } else {

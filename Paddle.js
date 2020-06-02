@@ -12,7 +12,7 @@ class Paddle extends GameObject{
     this.model.textureNum = 0;
 
     this.translate(0, -9.5, 0);
-    this.scale(this.constructor.length, 0.3, 0.3);
+    this.scale(this.constructor.length, 0.2, 0.3);
   }
 
   mouseMove(moveDirection) {
