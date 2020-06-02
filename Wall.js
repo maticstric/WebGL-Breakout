@@ -5,8 +5,7 @@ class Wall extends GameObject{
   constructor() {
     super();
 
-    // Fully opaque initially
-    this.model = new Cube([0, 0, 0, 1]);
+    this.model = new Cube();
     this.model.textureNum = 2;
   }
 }

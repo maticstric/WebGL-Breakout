@@ -1,6 +1,11 @@
 class Cube extends Model{
   constructor(color) {
-    super();
+    super(color);
+
+    if (color == null) {
+      color = [1, 1, 1, 1];
+    }
+
     this.vertices = this.initVertices(color);
   }
 

@@ -2,7 +2,12 @@ class Sphere extends Model{
   static get DIVISION() {return 10;}
 
   constructor(color) {
-    super();
+    super(color);
+
+    if (color == null) {
+      color = [1, 1, 1, 1];
+    }
+
     this.vertices = this.initVertices(color);
   }
 
