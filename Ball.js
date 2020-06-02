@@ -10,7 +10,8 @@ class Ball extends GameObject {
 
   constructor() {
     super();
-    this.model = new Sphere([0.99, 0.89, 0.59, 1]);
+    this.color = [0.99, 0.89, 0.59, 1];
+    this.model = new Sphere(this.color);
     this.model.hasLighting = 0;
     this.velocity = new Vector3([0, 0, 0]);
 
@@ -68,7 +69,7 @@ class Ball extends GameObject {
           this.velocity.normalize();
           this.velocity.mul(newSpeed);
         }
-      } else {
+      } else if (pointsInside == 0) {
         object.canBounceBall  = true;
       }
     }
