@@ -94,8 +94,7 @@ const SLIDER_LENGTH = 100;
 const MAX_SENSITIVITY = 0.1;
 const NUM_LIVES = 3;
 
-const CUBE = 0; // ints used for identifying the current model in the vertex buffer
-const SPHERE = 1;
+const SKY_ROTATE_SPEED = 0.05;
 
 let g_mouseSensitivity = MAX_SENSITIVITY / 2;
 let g_gameStarted = false;
@@ -200,6 +199,12 @@ function renderAllShapes() {
     w.model.render();
   });
 
+  // Update sky rotation
+  g_sky.rotate(SKY_ROTATE_SPEED, 0, 0, 1);
+  g_sky.rotate(SKY_ROTATE_SPEED, 0, 1, 0);
+  g_sky.rotate(SKY_ROTATE_SPEED, 1, 0, 0);
+
+  // Draw sky box
   g_sky.model.render();
   
   // Draw g_paddle

@@ -17,6 +17,10 @@ class GameObject {
     this.model.positionMatrix.translate(x, y, z);
   }
 
+  rotate(angle, x, y, z) {
+    this.model.rotationMatrix.rotate(angle, x, y, z);
+  }
+
   scale(x, y, z) {
     this.model.scaleMatrix.scale(x, y, z);
   }

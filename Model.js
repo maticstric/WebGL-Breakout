@@ -3,6 +3,7 @@ class Model {
   constructor() {
     this.positionMatrix = new Matrix4();
     this.scaleMatrix = new Matrix4();
+    this.rotationMatrix = new Matrix4();
     this.vertices = [];
     this.textureNum = -1;
     this.textureWeight = 1;
@@ -13,6 +14,7 @@ class Model {
     let modelMatrix = new Matrix4();
     modelMatrix.set(this.positionMatrix);
     modelMatrix.multiply(this.scaleMatrix);
+    modelMatrix.multiply(this.rotationMatrix);
 
     // Put model into buffer
     gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.STATIC_DRAW);
