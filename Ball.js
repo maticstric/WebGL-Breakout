@@ -50,15 +50,28 @@ class Ball extends GameObject {
       pointsInside = object.arePointsInside(this.collisionPoints); 
 
       if (pointsInside.length > 0 && object.canBounceBall) { // Collision happened
-        if (object instanceof Paddle){
+        if (object instanceof Paddle) {
           this.paddleBounce();
+          g_paddle_bounce_audio.play();
         } else {
           this.bounce(pointsInside);
+          
+          // Stop audio if already playing
+          g_wall_bounce_audio.pause();
+          g_wall_bounce_audio.currentTime = 0;
+
+          g_wall_bounce_audio.play();
         }
 
         object.canBounceBall = false;
 
         if (object instanceof Tile) {
+          // Stop audio if already playing
+          g_tile_bounce_audio_1.pause();
+          g_tile_bounce_audio_1.currentTime = 0;
+
+          g_tile_bounce_audio_1.play();
+
           g_tiles.splice(i, 1);
           objects.splice(i, 1);
 

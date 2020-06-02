@@ -108,6 +108,10 @@ let g_gameStarted = false;
 let g_lives = NUM_LIVES;
 let g_livesText;
 
+let g_paddle_bounce_audio = new Audio('audio/paddle_bounce.mp3');
+let g_wall_bounce_audio = new Audio('audio/wall_bounce.mp3');
+let g_tile_bounce_audio_1 = new Audio('audio/tile_bounce_1.mp3');
+
 let canvas;
 let gl;
 
