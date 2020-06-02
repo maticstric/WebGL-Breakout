@@ -44,6 +44,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler3;
   uniform bool u_LightingOn;
   uniform vec3 u_LightPosition;
+  uniform vec3 u_LightColor;
   uniform vec3 u_CameraPosition;
 
   void main() {
@@ -79,9 +80,9 @@ var FSHADER_SOURCE = `
       float nDotL = max(dot(normal, lightDirection), 0.0);
       float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
 
-      vec3 ambient = baseColor.rgb * 0.8;
-      vec3 diffuse = baseColor.rgb * nDotL * 0.6;
-      vec3 specular = baseColor.rgb * eDotR * 0.8;
+      vec3 ambient = baseColor.rgb * 0.65;
+      vec3 diffuse = baseColor.rgb * nDotL * u_LightColor;
+      vec3 specular = baseColor.rgb * eDotR * u_LightColor;
 
       gl_FragColor = vec4(ambient + diffuse + specular, baseColor.a);
     } else {
@@ -127,6 +128,7 @@ let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
 let u_LightingOn;
+let u_LightColor;
 let u_LightPosition;
 let u_CameraPosition;
 
@@ -184,6 +186,7 @@ function renderAllShapes() {
   /* FOR LIGHTING */
   gl.uniform3f(u_LightPosition, g_ball.positionX, g_ball.positionY, g_ball.positionZ);
   gl.uniform3f(u_CameraPosition, g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2]);
+  gl.uniform3fv(u_LightColor, new Float32Array(g_ball.color.slice(0, 3)));
 
   /* CUBES */
 
@@ -521,6 +524,13 @@ function connectVariablesToGLSL() {
   u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if (!u_ViewMatrix) {
     console.log('Failed to get the storage location of u_ViewMatrix');
+    //return;
+  }
+
+  // Get the storage location of u_LightColor
+  u_LightColor = gl.getUniformLocation(gl.program, 'u_LightColor');
+  if (!u_LightColor) {
+    console.log('Failed to get the storage location of u_LightColor');
     //return;
   }
 
