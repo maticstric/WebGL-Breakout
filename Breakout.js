@@ -206,11 +206,21 @@ function checkHasWon() {
   }
 }
 
+function livesString() {
+  let string = "";
+
+  for (let i = 0; i < g_lives; i ++) {
+    string += "❤️";
+  }
+
+  return string;
+}
+
 function startGame() {
   g_gameStarted = true;
 
   if (g_lives == NUM_LIVES) {
-    g_livesText.innerHTML = "Lives: " + g_lives;
+    g_livesText.innerHTML = livesString();
   }
 
   let randomX = Math.random() * 2 - 1; // between -1 and 1
@@ -231,7 +241,7 @@ function startGame() {
 function endGame(){
   g_lives --;
   g_gameStarted = false;
-  g_livesText.innerHTML = "Lives: " + g_lives;
+  g_livesText.innerHTML = livesString();
 
   if (g_lives == 0) {
     g_ball.velocity = new Vector3([0, 0, 0]);
@@ -301,7 +311,7 @@ function setupHTMLElements() {
     };
 
     g_livesText = document.getElementById("lives");
-  g_livesText.innerHTML = "Lives: " + NUM_LIVES;
+  g_livesText.innerHTML = livesString();
 }
 
 function sendImageToGLSL(n, image) {
