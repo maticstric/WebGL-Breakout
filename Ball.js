@@ -3,6 +3,7 @@ class Ball extends GameObject {
   static get COLLIDER_DIV () {return 8;}
   static get MIN_SPEED () {return 0.1;}
   static get MAX_SPEED () {return 0.25;}
+  static get MIN_SPEED_X () {return 0.01;}
   static get MIN_SPEED_Y () {return 0.01;}
   get velocityY () {return this.velocity.elements[1];}
   set velocityY (n) {this.velocity.elements[1] = n;}
@@ -107,6 +108,11 @@ class Ball extends GameObject {
     d.add(n); // d - 2 * dot(d, n) * n
 
     this.velocity.set(d);
+
+    // Clamp horizontal velocity
+    if (Math.abs(this.velocityX) < Ball.MIN_SPEED_X) {
+      this.velocityX = Math.sign(this.velocityX) * Ball.MIN_SPEED_X;
+    }
 
     // Clamp vertical velocity
     if (Math.abs(this.velocityY) < Ball.MIN_SPEED_Y) {
