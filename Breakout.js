@@ -77,11 +77,11 @@ var FSHADER_SOURCE = `
     float nDotL = max(dot(normal, lightDirection), 0.0);
     float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
 
-    vec4 diffuse = vec4(vec3(baseColor) * nDotL * 0.8, 1.0);
-    vec4 ambient = vec4(vec3(baseColor) * 0.6, 1.0);
-    vec4 specular = vec4(vec3(baseColor) * eDotR * 0.7, 1.0);
+    vec3 diffuse = baseColor.rgb * nDotL * 0.5;
+    vec3 ambient = baseColor.rgb * 0.6;
+    vec3 specular = baseColor.rgb * eDotR * 0.7;
 
-    gl_FragColor = diffuse + ambient + specular;
+    gl_FragColor = vec4(diffuse + ambient + specular, baseColor.a);
   }`;
 
 const SLIDER_LENGTH = 100;
@@ -569,6 +569,9 @@ function setupWebGL() {
 
   // Get the rendering context for WebGL
   gl = getWebGLContext(canvas, false);
+
+  gl.enable(gl.BLEND);
+  gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
   if (!gl) {
     console.log('Failed to get the rendering context for WebGL');

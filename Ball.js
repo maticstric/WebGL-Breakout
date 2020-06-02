@@ -9,7 +9,7 @@ class Ball extends GameObject {
 
   constructor() {
     super();
-    this.model = new Sphere([0.22, 0.25, 0.3, 1]);
+    this.model = new Sphere([0.22, 0.25, 0.3, 0.5]);
     this.velocity = new Vector3([0, 0, 0]);
     this.canHitPaddle = true;
 
