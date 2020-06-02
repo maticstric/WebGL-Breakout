@@ -69,7 +69,7 @@ class Ball extends GameObject {
           this.velocity.normalize();
           this.velocity.mul(newSpeed);
         }
-      } else if (pointsInside == 0) {
+      } else if (pointsInside.length == 0) {
         object.canBounceBall  = true;
       }
     }
