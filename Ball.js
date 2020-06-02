@@ -1,8 +1,11 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get colliderSubdivision () {return 8;}
-  static get minSpeed () {return 0.1;}
-  static get maxSpeed () {return 0.25;}
+  static get COLLIDER_DIV () {return 8;}
+  static get MIN_SPEED () {return 0.1;}
+  static get MAX_SPEED () {return 0.25;}
+  static get MIN_SPEED_Y () {return 0.01;}
+  get velocityY () {return this.velocity.elements[1];}
+  set velocityY (n) {this.velocity.elements[1] = n;}
 
   constructor() {
     super();
@@ -58,7 +61,7 @@ class Ball extends GameObject {
 
           checkHasWon();
 
-          let newSpeed = Ball.maxSpeed - (Ball.maxSpeed - Ball.minSpeed) * (g_tiles.length / g_tilesOriginalLength);
+          let newSpeed = Ball.MAX_SPEED - (Ball.MAX_SPEED - Ball.MIN_SPEED) * (g_tiles.length / g_tilesOriginalLength);
 
           this.velocity.normalize();
           this.velocity.mul(newSpeed);
@@ -103,11 +106,16 @@ class Ball extends GameObject {
     d.add(n); // d - 2 * dot(d, n) * n
 
     this.velocity.set(d);
+
+    // Clamp vertical velocity
+    if (Math.abs(this.velocityY) < Ball.MIN_SPEED_Y) {
+      this.velocityY = Math.sign(this.velocityY) * Ball.MIN_SPEED_Y;
+    }
   }
 
   get collisionPoints() {
     let radius = this.width / 2; 
-    let increment = 360 / Ball.colliderSubdivision;
+    let increment = 360 / Ball.COLLIDER_DIV;
 
     let points = [];
 

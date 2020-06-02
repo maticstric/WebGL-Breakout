@@ -230,7 +230,7 @@ function startGame() {
   velocity.normalize();
 
   if (g_ball.velocity.magnitude() === 0){
-    velocity.mul(Ball.minSpeed);
+    velocity.mul(Ball.MIN_SPEED);
   } else {
     velocity.mul(g_ball.velocity.magnitude());
   }
