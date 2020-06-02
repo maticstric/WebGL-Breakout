@@ -223,7 +223,7 @@ function livesString() {
   let string = "";
 
   for (let i = 0; i < g_lives; i ++) {
-    string += "❤️";
+    string += "💛";
   }
 
   return string;
