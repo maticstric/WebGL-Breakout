@@ -42,6 +42,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
   uniform sampler2D u_Sampler3;
+  uniform sampler2D u_Sampler4;
   uniform bool u_LightingOn;
   uniform vec3 u_LightPosition;
   uniform vec3 u_LightColor;
@@ -65,6 +66,9 @@ var FSHADER_SOURCE = `
       baseColor = (1.0 - t) * vertexColor + t * texColor;
     } else if (u_TextureNum == 3) {
       texColor = texture2D(u_Sampler3, v_UV); // use texture3
+      baseColor = (1.0 - t) * vertexColor + t * texColor; 
+    } else if (u_TextureNum == 4) {
+      texColor = texture2D(u_Sampler4, v_UV); // use texture4
       baseColor = (1.0 - t) * vertexColor + t * texColor;
     } else {
       baseColor = vertexColor;
@@ -94,7 +98,10 @@ const SLIDER_LENGTH = 100;
 const MAX_SENSITIVITY = 0.1;
 const NUM_LIVES = 3;
 
-const SKY_ROTATE_SPEED = 0.05;
+const SKY1_Y_SPEED = 0.05;
+const SKY1_Z_SPEED = 0.06;
+const SKY2_X_SPEED = 0.1;
+const SKY2_Y_SPEED = 0.09;
 
 let g_mouseSensitivity = MAX_SENSITIVITY / 2;
 let g_gameStarted = false;
@@ -110,7 +117,8 @@ let g_camera = new Camera();
 let g_ball = new Ball();
 let g_paddle = new Paddle();
 
-let g_sky = new Sky();
+let g_sky1 = new Sky(35, 3);
+let g_sky2 = new Sky(25, 4);
 
 let g_tiles;
 let g_tilesOriginalLength;
@@ -135,6 +143,7 @@ let u_Sampler0;
 let u_Sampler1;
 let u_Sampler2;
 let u_Sampler3;
+let u_Sampler4;
 
 function main() {
   // WebGL and GLSL setup
@@ -199,13 +208,19 @@ function renderAllShapes() {
     w.model.render();
   });
 
-  // Update sky rotation
-  g_sky.rotate(SKY_ROTATE_SPEED, 0, 0, 1);
-  g_sky.rotate(SKY_ROTATE_SPEED, 0, 1, 0);
-  g_sky.rotate(SKY_ROTATE_SPEED, 1, 0, 0);
+  // Update sky1 rotation
+  g_sky1.rotate(SKY1_Y_SPEED, 0, 1, 0);
+  g_sky1.rotate(SKY1_Z_SPEED, 0, 0, 1);
 
   // Draw sky box
-  g_sky.model.render();
+  g_sky1.model.render();
+
+  // Update sky2 rotation
+  g_sky2.rotate(SKY2_X_SPEED, 1, 0, 0);
+  g_sky2.rotate(SKY2_Y_SPEED, 0, 1, 0);
+
+  // Draw sky box
+  g_sky2.model.render();
   
   // Draw g_paddle
   g_paddle.model.render(); 
@@ -359,6 +374,9 @@ function sendImageToGLSL(n, image) {
       case 3:
           gl.activeTexture(gl.TEXTURE3);
           break;
+      case 4:
+          gl.activeTexture(gl.TEXTURE4);
+          break;
   }
 
   // Bind the texture object to the target
@@ -366,7 +384,7 @@ function sendImageToGLSL(n, image) {
   // Set the texture parameters
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   // Set the tecture image
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 
   // Set the texture until 0 to the sampler
   switch (n) {
@@ -381,6 +399,9 @@ function sendImageToGLSL(n, image) {
           break;
       case 3:
           gl.uniform1i(u_Sampler3, 3);
+          break;      
+       case 4:
+          gl.uniform1i(u_Sampler4, 4);
           break;
   }
 }
@@ -410,17 +431,25 @@ function initializeTextures() {
       return false;
   }
 
+  var image4 = new Image();
+  if (!image4) {
+      console.log('Failed to create the image object');
+      return false;
+  }
+
   // Register the event handler to be called on loading an image
   image0.onload = function(){ sendImageToGLSL(0, image0); };
   image1.onload = function(){ sendImageToGLSL(1, image1); };
   image2.onload = function(){ sendImageToGLSL(2, image2); };
   image3.onload = function(){ sendImageToGLSL(3, image3); };
+  image4.onload = function(){ sendImageToGLSL(4, image4); };
 
   // Tell the browser to load the image
   image0.src = 'textures/paddle.png';
   image1.src = 'textures/tile.png';
   image2.src = 'textures/wall.png';
-  image3.src = 'textures/sky.png';
+  image3.src = 'textures/sky1.png';
+  image4.src = 'textures/sky2.png';
   
   return true;
 }
@@ -565,6 +594,13 @@ function connectVariablesToGLSL() {
 
   if(!u_Sampler3) {
       console.log('Failed to get the storage location of u_Sampler3');
+  }
+
+  // Get the storage location of u_Sampler4
+  u_Sampler4 = gl.getUniformLocation(gl.program, 'u_Sampler4');
+
+  if(!u_Sampler4) {
+      console.log('Failed to get the storage location of u_Sampler4');
   }
 
   // Get the storage location of u_LightPosition
