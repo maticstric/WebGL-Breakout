@@ -41,6 +41,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler0;
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
+  uniform sampler2D u_Sampler3;
   uniform vec3 u_LightPosition;
   uniform vec3 u_CameraPosition;
 
@@ -60,11 +61,12 @@ var FSHADER_SOURCE = `
     } else if (u_TextureNum == 2) {
       texColor = texture2D(u_Sampler2, v_UV); // use texture2
       baseColor = (1.0 - t) * vertexColor + t * texColor;
+    } else if (u_TextureNum == 3) {
+      texColor = texture2D(u_Sampler3, v_UV); // use texture3
+      baseColor = (1.0 - t) * vertexColor + t * texColor;
     } else {
       baseColor = vertexColor;
     }
-
-    gl_FragColor = baseColor;
 
     // Lighting
     vec3 normal = normalize(v_Normal);
@@ -75,9 +77,9 @@ var FSHADER_SOURCE = `
     float nDotL = max(dot(normal, lightDirection), 0.0);
     float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
 
-    vec4 diffuse = vec4(vec3(gl_FragColor) * nDotL * 0.8, 1.0);
-    vec4 ambient = vec4(vec3(gl_FragColor) * 0.6, 1.0);
-    vec4 specular = vec4(vec3(gl_FragColor) * eDotR * 0.7, 1.0);
+    vec4 diffuse = vec4(vec3(baseColor) * nDotL * 0.8, 1.0);
+    vec4 ambient = vec4(vec3(baseColor) * 0.6, 1.0);
+    vec4 specular = vec4(vec3(baseColor) * eDotR * 0.7, 1.0);
 
     gl_FragColor = diffuse + ambient + specular;
   }`;
@@ -103,6 +105,8 @@ let g_camera = new Camera();
 let g_ball = new Ball();
 let g_paddle = new Paddle();
 
+let g_sky = new Sky();
+
 let g_tiles;
 let g_tilesOriginalLength;
 let g_walls;
@@ -123,6 +127,7 @@ let u_CameraPosition;
 let u_Sampler0;
 let u_Sampler1;
 let u_Sampler2;
+let u_Sampler3;
 
 function main() {
   // WebGL and GLSL setup
@@ -185,6 +190,8 @@ function renderAllShapes() {
   g_walls.forEach((w) => {
     w.model.render();
   });
+
+  g_sky.model.render();
   
   // Draw g_paddle
   g_paddle.model.render(); 
@@ -325,7 +332,7 @@ function sendImageToGLSL(n, image) {
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // flip the image's y axis
 
   // Enable the tecture unit
-  switch(n){
+  switch (n) {
       case 0:
           gl.activeTexture(gl.TEXTURE0);
           break;
@@ -334,6 +341,9 @@ function sendImageToGLSL(n, image) {
           break;
       case 2:
           gl.activeTexture(gl.TEXTURE2);
+          break;
+      case 3:
+          gl.activeTexture(gl.TEXTURE3);
           break;
   }
 
@@ -345,7 +355,7 @@ function sendImageToGLSL(n, image) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
 
   // Set the texture until 0 to the sampler
-  switch(n){
+  switch (n) {
       case 0:
           gl.uniform1i(u_Sampler0, 0);
           break;
@@ -354,6 +364,9 @@ function sendImageToGLSL(n, image) {
           break;
       case 2:
           gl.uniform1i(u_Sampler2, 2);
+          break;
+      case 3:
+          gl.uniform1i(u_Sampler3, 3);
           break;
   }
 }
@@ -377,15 +390,23 @@ function initializeTextures() {
       return false;
   }
 
+  var image3 = new Image();
+  if (!image3) {
+      console.log('Failed to create the image object');
+      return false;
+  }
+
   // Register the event handler to be called on loading an image
   image0.onload = function(){ sendImageToGLSL(0, image0); };
   image1.onload = function(){ sendImageToGLSL(1, image1); };
   image2.onload = function(){ sendImageToGLSL(2, image2); };
+  image3.onload = function(){ sendImageToGLSL(3, image3); };
 
   // Tell the browser to load the image
   image0.src = 'textures/paddle.png';
   image1.src = 'textures/tile.png';
   image2.src = 'textures/wall.png';
+  image3.src = 'textures/sky.png';
   
   return true;
 }
@@ -491,25 +512,32 @@ function connectVariablesToGLSL() {
     //return;
   }
 
-  // Get the storage location of u_Sampler
+  // Get the storage location of u_Sampler0
   u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
 
   if(!u_Sampler0) {
       console.log('Failed to get the storage location of u_Sampler0');
   }
 
-  // Get the storage location of u_Sampler
+  // Get the storage location of u_Sampler1
   u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1');
 
   if(!u_Sampler1) {
       console.log('Failed to get the storage location of u_Sampler1');
   }
 
-  // Get the storage location of u_Sampler
+  // Get the storage location of u_Sampler2
   u_Sampler2 = gl.getUniformLocation(gl.program, 'u_Sampler2');
 
   if(!u_Sampler2) {
       console.log('Failed to get the storage location of u_Sampler2');
+  }
+
+  // Get the storage location of u_Sampler3
+  u_Sampler3 = gl.getUniformLocation(gl.program, 'u_Sampler3');
+
+  if(!u_Sampler3) {
+      console.log('Failed to get the storage location of u_Sampler3');
   }
 
   // Get the storage location of u_LightPosition
