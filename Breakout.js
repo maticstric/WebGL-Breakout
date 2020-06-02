@@ -77,11 +77,11 @@ var FSHADER_SOURCE = `
     float nDotL = max(dot(normal, lightDirection), 0.0);
     float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
 
-    vec3 diffuse = baseColor.rgb * nDotL * 0.5;
-    vec3 ambient = baseColor.rgb * 0.6;
-    vec3 specular = baseColor.rgb * eDotR * 0.7;
+    vec3 ambient = baseColor.rgb * 0.8;
+    vec3 diffuse = baseColor.rgb * nDotL * 0.6;
+    vec3 specular = baseColor.rgb * eDotR * 0.8;
 
-    gl_FragColor = vec4(diffuse + ambient + specular, baseColor.a);
+    gl_FragColor = vec4(ambient + diffuse + specular, baseColor.a);
   }`;
 
 const SLIDER_LENGTH = 100;
