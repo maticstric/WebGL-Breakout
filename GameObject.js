@@ -6,6 +6,7 @@ const MATRIX_Z = 14;
 class GameObject {
   translate(x, y, z) {
     this.model.positionMatrix.translate(x, y, z);
+    this.canBounceBall = true;
   }
 
   translateVect(v) {

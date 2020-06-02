@@ -9,9 +9,8 @@ class Ball extends GameObject {
 
   constructor() {
     super();
-    this.model = new Sphere([0.22, 0.25, 0.3, 0.5]);
+    this.model = new Sphere([1, 1, 1, 1]);
     this.velocity = new Vector3([0, 0, 0]);
-    this.canHitPaddle = true;
 
     this.scale(0.35, 0.35, 0.35);
   }
@@ -47,13 +46,14 @@ class Ball extends GameObject {
       // Check if any points are inside
       pointsInside = object.arePointsInside(this.collisionPoints); 
 
-      if (pointsInside.length > 0) { // Collision happened
-        if (object instanceof Paddle && this.canHitPaddle){
+      if (pointsInside.length > 0 && object.canBounceBall) { // Collision happened
+        if (object instanceof Paddle){
           this.paddleBounce();
-          this.canHitPaddle = false;
-        } else if (!(object instanceof Paddle)) {
+        } else {
           this.bounce(pointsInside);
         }
+
+        object.canBounceBall = false;
 
         if (object instanceof Tile) {
           g_tiles.splice(i, 1);
@@ -66,8 +66,8 @@ class Ball extends GameObject {
           this.velocity.normalize();
           this.velocity.mul(newSpeed);
         }
-      } else if (object instanceof Paddle){
-        this.canHitPaddle = true;
+      } else {
+        object.canBounceBall  = true;
       }
     }
   }
