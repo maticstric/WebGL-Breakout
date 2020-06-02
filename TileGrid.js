@@ -1,6 +1,6 @@
 class TileGrid {
   static get EDGE_X() {return 9;}
-  static get EDGE_Y() {return 10.54;}
+  static get EDGE_Y() {return 10.4;}
   static get WALL_THICKNESS() {return 0.5;}
 
   static get eastEdge(){return TileGrid.EDGE_X - TileGrid.WALL_THICKNESS;}
