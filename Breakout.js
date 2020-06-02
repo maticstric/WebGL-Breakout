@@ -84,7 +84,7 @@ var FSHADER_SOURCE = `
       float nDotL = max(dot(normal, lightDirection), 0.0);
       float eDotR = pow(max(dot(cameraDirection, reflect), 0.0), 100.0);
 
-      vec3 ambient = baseColor.rgb * 0.65;
+      vec3 ambient = baseColor.rgb * 0.7;
       vec3 diffuse = baseColor.rgb * nDotL * u_LightColor;
       vec3 specular = baseColor.rgb * eDotR * u_LightColor;
 
@@ -117,8 +117,8 @@ let g_camera = new Camera();
 let g_ball = new Ball();
 let g_paddle = new Paddle();
 
-let g_sky1 = new Sky(35, 3);
-let g_sky2 = new Sky(25, 4);
+let g_sky1 = new Sky(40, 3);
+let g_sky2 = new Sky(28, 4);
 
 let g_tiles;
 let g_tilesOriginalLength;
