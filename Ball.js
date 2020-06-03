@@ -1,6 +1,6 @@
 class Ball extends GameObject {
   // Division of the collider as an angle
-  static get COLLIDER_DIV () {return 8;}
+  static get COLLIDER_DIV () {return 16;}
   static get MIN_SPEED () {return 0.1;}
   static get MAX_SPEED () {return 0.25;}
   static get MIN_SPEED_X () {return 0.01;}
@@ -14,6 +14,7 @@ class Ball extends GameObject {
     this.model = new Sphere(this.color);
     this.model.hasLighting = 0;
     this.velocity = new Vector3([0, 0, 0]);
+    this.canBouncePaddle = true;
 
     this.scale(0.35, 0.35, 0.35);
   }
@@ -49,12 +50,14 @@ class Ball extends GameObject {
       // Check if any points are inside
       pointsInside = object.arePointsInside(this.collisionPoints); 
 
-      if (pointsInside.length > 0 && object.canBounceBall) { // Collision happened
-        if (object instanceof Paddle) {
+      if (pointsInside.length > 0) { // Collision happened
+        if (object instanceof Paddle && this.canBouncePaddle) {
           this.paddleBounce();
+          this.canBouncePaddle = false;
           g_paddle_bounce_audio.play();
-        } else {
+        } else if (!(object instanceof Paddle)){
           this.bounce(pointsInside);
+          this.canBouncePaddle = true;
           
           // Stop audio if already playing
           g_wall_bounce_audio.pause();
@@ -62,8 +65,6 @@ class Ball extends GameObject {
 
           g_wall_bounce_audio.play();
         }
-
-        object.canBounceBall = false;
 
         if (object instanceof Tile) {
           // Stop audio if already playing
@@ -82,8 +83,6 @@ class Ball extends GameObject {
           this.velocity.normalize();
           this.velocity.mul(newSpeed);
         }
-      } else if (pointsInside.length == 0) {
-        object.canBounceBall  = true;
       }
     }
   }
@@ -103,34 +102,40 @@ class Ball extends GameObject {
     // r is the reflection of d accross n, n must be normalized
 
     let n = new Vector3([0, 0, 0]);
+
     // Find the normal vector in between the all the pointsInside and 
     for (let point of pointsInside){
       point.sub(this.position);
       point.normalize();
       n.add(point);
     }
+
     n.normalize();
-    // Invert it to serve as the reflection axis
-    n.mul(-1);
 
-    // Set the incident vector
-    let d = new Vector3([0, 0, 0]);
-    d.set(this.velocity);
+    // Check if velocity is in the same direction as the collision points
+    if (Vector3.dot(n, this.velocity) > 0){
+      // Invert it to serve as the reflection axis
+      n.mul(-1);
 
-    n.mul(Vector3.dot(d, n) * -2); // -2 * dot(d, n) * n
+      // Set the incident vector
+      let d = new Vector3([0, 0, 0]);
+      d.set(this.velocity);
 
-    d.add(n); // d - 2 * dot(d, n) * n
+      n.mul(Vector3.dot(d, n) * -2); // -2 * dot(d, n) * n
 
-    this.velocity.set(d);
+      d.add(n); // d - 2 * dot(d, n) * n
 
-    // Clamp horizontal velocity
-    if (Math.abs(this.velocityX) < Ball.MIN_SPEED_X) {
-      this.velocityX = Math.sign(this.velocityX) * Ball.MIN_SPEED_X;
-    }
+      this.velocity.set(d);
 
-    // Clamp vertical velocity
-    if (Math.abs(this.velocityY) < Ball.MIN_SPEED_Y) {
-      this.velocityY = Math.sign(this.velocityY) * Ball.MIN_SPEED_Y;
+      // Clamp horizontal velocity
+      if (Math.abs(this.velocityX) < Ball.MIN_SPEED_X) {
+        this.velocityX = Math.sign(this.velocityX) * Ball.MIN_SPEED_X;
+      }
+
+      // Clamp vertical velocity
+      if (Math.abs(this.velocityY) < Ball.MIN_SPEED_Y) {
+        this.velocityY = Math.sign(this.velocityY) * Ball.MIN_SPEED_Y;
+      }
     }
   }
 
