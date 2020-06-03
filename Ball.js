@@ -3,8 +3,8 @@ class Ball extends GameObject {
   static get COLLIDER_DIV () {return 16;}
   static get MIN_SPEED () {return 0.1;}
   static get MAX_SPEED () {return 0.25;}
-  static get MIN_SPEED_X () {return 0.01;}
-  static get MIN_SPEED_Y () {return 0.01;}
+  static get MIN_SPEED_X () {return 0.015;}
+  static get MIN_SPEED_Y () {return 0.015;}
   get velocityY () {return this.velocity.elements[1];}
   set velocityY (n) {this.velocity.elements[1] = n;}
 
