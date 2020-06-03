@@ -37,7 +37,8 @@ class TileGrid {
     // We'll probably adjust all these numbers later
     
     west.scale(TileGrid.WALL_THICKNESS, TileGrid.EDGE_Y, TileGrid.WALL_THICKNESS);
-    north.scale(TileGrid.EDGE_X, TileGrid.WALL_THICKNESS, TileGrid.WALL_THICKNESS);
+    north.scale(TileGrid.EDGE_X + TileGrid.WALL_THICKNESS / 2, TileGrid.WALL_THICKNESS, 
+      TileGrid.WALL_THICKNESS);
     east.scale(TileGrid.WALL_THICKNESS, TileGrid.EDGE_Y, TileGrid.WALL_THICKNESS);
 
     west.translate(-TileGrid.EDGE_X, 0, 0);
