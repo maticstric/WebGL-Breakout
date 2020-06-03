@@ -107,6 +107,7 @@ let g_mouseSensitivity = MAX_SENSITIVITY / 2;
 let g_gameStarted = false;
 let g_lives = NUM_LIVES;
 let g_livesText;
+let g_currentLevel = 1;
 
 let g_paddle_bounce_audio = new Audio('audio/paddle_bounce.mp3');
 let g_wall_bounce_audio = new Audio('audio/wall_bounce.mp3');
@@ -162,8 +163,7 @@ function main() {
 
   window.addEventListener('resize', resize, false);
 
-  g_tiles = TileGrid.generateGrid(7, 7, 0.3);
-  g_tilesOriginalLength = g_tiles.length;
+  g_tiles = TileGrid.generateLevel1(7, 7, 0.3);
 
   g_walls = TileGrid.generateWalls();
 
@@ -266,9 +266,34 @@ function renderAllShapes() {
 function checkHasWon() {
   if (g_tiles.length == 0) {
     g_gameStarted = false;
-    g_lives = NUM_LIVES;
-    g_livesText.innerHTML = "You Win! 😊";
-    g_tiles = TileGrid.generateGrid(7, 7, 0.3);
+
+    g_currentLevel++;
+
+    // Reset speed
+    g_ball.velocity.normalize();
+    g_ball.velocity.mul(Ball.MIN_SPEED);
+
+    switch(g_currentLevel) {
+      case 2:
+        g_tiles = TileGrid.generateLevel2(10, 7, 0.3);
+
+        break;
+      case 3:
+        g_tiles = TileGrid.generateLevel3(10, 7, 0.3);
+
+        break;
+      case 4:
+        // Same as level 1, but bigger
+        g_tiles = TileGrid.generateLevel1(18, 7, 0.3);
+
+        break;
+      default:
+        g_tiles = TileGrid.generateLevel1(7, 7, 0.3);
+
+        g_currentLevel = 1;
+        g_livesText.innerHTML = "You Win! 😊";
+        g_lives = NUM_LIVES;
+    }
   }
 }
 
@@ -311,7 +336,7 @@ function endGame(){
 
   if (g_lives == 0) {
     g_ball.velocity = new Vector3([0, 0, 0]);
-    g_tiles = TileGrid.generateGrid(7, 7, 0.3);
+    g_tiles = TileGrid.generateLevel1(7, 7, 0.3);
     g_lives = NUM_LIVES;
     g_livesText.innerHTML = "Game Over 😒";
   }

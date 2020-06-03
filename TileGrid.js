@@ -6,7 +6,7 @@ class TileGrid {
   static get eastEdge(){return TileGrid.WALL_X - TileGrid.WALL_RADIUS;}
   static get westEdge(){return -TileGrid.WALL_X + TileGrid.WALL_RADIUS;}
 
-  static generateGrid(rows, cols, margin) {
+  static generateLevel1(rows, cols, margin) {
     let tiles = [];
 
     for (let r = 0; r < rows; r++) {
@@ -25,6 +25,58 @@ class TileGrid {
         tiles.push(t);
       } 
     }
+
+    g_tilesOriginalLength = tiles.length;
+
+    return tiles;
+  }
+
+  static generateLevel2(rows, cols, margin) {
+    let tiles = [];
+
+    for (let r = 0; r < rows; r += 2) {
+      for (let c = 0; c < cols; c++) {
+        let t = new Tile();
+
+        let width = t.width;
+        let height = t.height;
+
+        let x = -(margin * ((cols - 1) / 2) + width * ((cols - 1) / 2)) + c * (width + margin);
+        let y = -(margin * ((rows - 1) / 2) + height * ((rows - 1) / 2)) + r * (height + margin);
+        let z = 0;
+
+        t.model.positionMatrix.translate(x, y, z);
+
+        tiles.push(t);
+      } 
+    }
+
+    g_tilesOriginalLength = tiles.length;
+
+    return tiles;
+  }
+
+  static generateLevel3(rows, cols, margin) {
+    let tiles = [];
+
+    for (let r = 0; r < rows; r += 2) {
+      for (let c = 0; c < cols; c += 2) {
+        let t = new Tile();
+
+        let width = t.width;
+        let height = t.height;
+
+        let x = -(margin * ((cols - 1) / 2) + width * ((cols - 1) / 2)) + c * (width + margin);
+        let y = -(margin * ((rows - 1) / 2) + height * ((rows - 1) / 2)) + r * (height + margin);
+        let z = 0;
+
+        t.model.positionMatrix.translate(x, y, z);
+
+        tiles.push(t);
+      } 
+    }
+
+    g_tilesOriginalLength = tiles.length;
 
     return tiles;
   }
