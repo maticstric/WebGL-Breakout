@@ -6,6 +6,6 @@ class Camera {
 
     this.fov = 45;
     this.near = 0.1;
-    this.far = 100;
+    this.far = 500;
   }
 }

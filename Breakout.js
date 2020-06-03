@@ -185,7 +185,7 @@ function resize() {
   let canvasRatio = canvas.height / canvas.width;
 
   let viewHeight = window.innerHeight - $("#webgl").offset().top * 2 - 
-                   $("#lowerContent").outerHeight(true)
+                   $("#lowerContent").outerHeight(true);
   let viewWidth = window.innerWidth;
   let viewRatio = viewHeight / window.innerWidth;
 
