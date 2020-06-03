@@ -121,7 +121,7 @@ let g_camera = new Camera();
 let g_ball = new Ball();
 let g_paddle = new Paddle();
 
-let g_sky1 = new Sky(40, 3);
+let g_sky1 = new Sky(50, 3);
 let g_sky2 = new Sky(28, 4);
 
 let g_tiles;
