@@ -160,6 +160,8 @@ function main() {
   setupHTMLElements();
   setupControls();
 
+  window.addEventListener('resize', resize, false);
+
   g_tiles = TileGrid.generateGrid(7, 7, 0.3);
   g_tilesOriginalLength = g_tiles.length;
 
@@ -174,10 +176,34 @@ function main() {
 }
 
 function tick() {
+  resize();
   renderAllShapes();  
-
   requestAnimationFrame(tick);
 }
+
+function resize() {
+  let canvasRatio = canvas.height / canvas.width;
+
+  let viewHeight = window.innerHeight - $("#webgl").offset().top * 2 - 
+                   $("#lowerContent").outerHeight(true)
+  let viewWidth = window.innerWidth;
+  let viewRatio = viewHeight / window.innerWidth;
+
+  let newWidth;
+  let newHeight;
+
+  if (viewRatio < canvasRatio) {
+      newHeight = viewHeight;
+      newWidth = newHeight / canvasRatio;
+  } else {
+      newWidth = viewWidth;
+      newHeight = newWidth * canvasRatio;
+  }
+
+  canvas.style.width = newWidth + 'px';
+  canvas.style.height = newHeight + 'px';
+}
+
 
 function renderAllShapes() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

@@ -6,19 +6,25 @@
   </head>
 
   <body onload="main()">
-    <div class="center">
-      <canvas id="webgl" width="600" height="700">
+    <div class="center spaced">
+      <canvas id="webgl" width="1410" height="1575">
       Please use a browser that supports "canvas"
       </canvas>
     </div>
     
-    <div class="center">
-      <span id="lives"></span><p>
-      <span>Sensitivity:</span>
-      <input type="range" id="sensitivity" value = "50" name="points" min="0" 
+    <div class="center spaced" id="lowerContent">
+      <div>
+        <span id="lives"></span>
+      </div>
+      <p>
+      <div>
+        <span>Sensitivity:</span>
+        <input type="range" id="sensitivity" value = "50" name="points" min="0" 
         max="100">
+      </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./lib/webgl-utils.js"></script>
     <script src="./lib/webgl-debug.js"></script>
     <script src="./lib/cuon-utils.js"></script>
@@ -44,11 +50,12 @@
     }
 
     .center {
-      padding: 10px;
-      margin: auto;
-      display: block;
-      width: 600px;
       text-align: center;
+    }
+
+    .spaced {
+      margin-top: 40px;
+      margin-bottom: 40px;
     }
 
     span {
