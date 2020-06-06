@@ -184,7 +184,7 @@ function tick() {
 function resize() {
   let canvasRatio = canvas.height / canvas.width;
 
-  let viewHeight = window.innerHeight - $("#webgl").offset().top * 2 - 
+  let viewHeight = window.innerHeight - parseInt($('.center').css("marginTop")) * 2 - 
                    $("#lowerContent").outerHeight(true);
   let viewWidth = window.innerWidth;
   let viewRatio = viewHeight / window.innerWidth;
