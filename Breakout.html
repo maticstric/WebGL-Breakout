@@ -1,5 +1,6 @@
 <DOCTYPE html>
-<html lang="en">
+  <html lang="en">
+
   <head>
     <meta charset="utf-8" />
     <title>Breakout</title>
@@ -8,10 +9,10 @@
   <body onload="main()">
     <div class="center spaced">
       <canvas id="webgl" width="1410" height="1575">
-      Please use a browser that supports "canvas"
+        Please use a browser that supports "canvas"
       </canvas>
     </div>
-    
+
     <div class="center spaced" id="lowerContent">
       <div>
         <span id="lives"></span>
@@ -19,12 +20,14 @@
       <p>
       <div>
         <span>Sensitivity:</span>
-        <input type="range" id="sensitivity" value = "50" name="points" min="0" 
-        max="100">
+        <input type="range" id="sensitivity" value="50" name="points" min="0"
+          max="100">
       </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+      </script>
     <script src="./lib/webgl-utils.js"></script>
     <script src="./lib/webgl-debug.js"></script>
     <script src="./lib/cuon-utils.js"></script>
@@ -68,5 +71,5 @@
       background-image: url('textures/sky1.png');
     }
   </style>
-</html>
 
+  </html>
