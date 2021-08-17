@@ -1,0 +1,29 @@
+{
+  "name": "webgl-breakout",
+  "version": "1.0.0",
+  "description": "WebGL-Breakout",
+  "main": "webserver.bat",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ByteDrummer/WebGL-Breakout.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ByteDrummer/WebGL-Breakout/issues"
+  },
+  "homepage": "https://github.com/ByteDrummer/WebGL-Breakout#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0"
+  }
+}
